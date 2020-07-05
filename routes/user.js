@@ -1,0 +1,1 @@
+const { User, sequelize } = require("../sequelize");
