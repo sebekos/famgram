@@ -1,8 +1,4 @@
-import {
-    LOGIN_SUCCESS,
-    LOGIN_FAIL,
-    LOGOUT
-} from "../actions/types";
+import { LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT } from "../constants/constants";
 
 const initialState = {
     token: localStorage.getItem("token"),
@@ -10,7 +6,7 @@ const initialState = {
     user: null
 };
 
-export default function(state = initialState, action) {
+export default function (state = initialState, action) {
     const { type, payload } = action;
 
     switch (type) {
