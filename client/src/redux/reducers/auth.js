@@ -1,9 +1,7 @@
 import { LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT } from "../constants/constants";
 
 const initialState = {
-    token: localStorage.getItem("token"),
-    isAuthenticated: null,
-    user: null
+    token: localStorage.getItem("token")
 };
 
 export default function (state = initialState, action) {
@@ -14,18 +12,14 @@ export default function (state = initialState, action) {
             localStorage.setItem("token", payload.token);
             return {
                 ...state,
-                ...payload,
-                isAuthenticated: true,
-                loading: false
+                ...payload
             };
         case LOGIN_FAIL:
         case LOGOUT:
             localStorage.removeItem("token");
             return {
                 ...state,
-                token: null,
-                isAuthenticated: false,
-                user: null
+                token: null
             };
         default:
             return state;

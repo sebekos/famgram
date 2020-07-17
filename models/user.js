@@ -20,6 +20,11 @@ module.exports = (sequelize, type) => {
             type: type.STRING,
             allowNull: false
         },
+        auth: {
+            type: type.INTEGER,
+            allowNull: false,
+            defaultValue: 0
+        },
         lastlogindate: {
             type: type.DATE,
             defaultValue: new Date()

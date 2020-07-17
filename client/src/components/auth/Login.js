@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { TextField, Button } from "@material-ui/core";
+import { connect } from "react-redux";
+
+import { login } from "../../redux/actions/auth";
 
 const LoginContainer = styled.div`
     width: max-content;
@@ -19,7 +22,7 @@ const FormContainer = styled.form`
     }
 `;
 
-const Login = () => {
+const Login = ({ login }) => {
     const [formData, setFormData] = useState({
         email: "",
         password: ""
@@ -36,27 +39,14 @@ const Login = () => {
 
     const onSubmit = (e) => {
         e.preventDefault();
+        login(email, password);
     };
 
     return (
         <LoginContainer>
             <FormContainer onSubmit={onSubmit}>
-                <TextField
-                    name="email"
-                    type="text"
-                    onChange={onChange}
-                    value={email}
-                    label="Email"
-                    variant="filled"
-                />
-                <TextField
-                    name="password"
-                    type="password"
-                    onChange={onChange}
-                    value={password}
-                    label="Password"
-                    variant="filled"
-                />
+                <TextField name="email" type="text" onChange={onChange} value={email} label="Email" variant="filled" />
+                <TextField name="password" type="password" onChange={onChange} value={password} label="Password" variant="filled" />
                 <Button onClick={onSubmit} variant="contained" color="primary">
                     Login
                 </Button>
@@ -65,4 +55,12 @@ const Login = () => {
     );
 };
 
-export default Login;
+const mapStateToProps = (state) => ({
+    auth: state.auth
+});
+
+const mapDispatchToProps = {
+    login
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
