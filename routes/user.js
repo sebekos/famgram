@@ -49,7 +49,7 @@ router.post(
             // Hash password
             userFields.password = await bcrypt.hash(password, salt);
             user = await User.create(userFields);
-            const token = jwt.sign({ userId: user.dataValues.uuid, email: user.dataValues.email }, process.env.jwtSecret, {
+            const token = jwt.sign({ userId: user.dataValues.uuid, email: user.dataValues.email, isAuth: 0 }, process.env.jwtSecret, {
                 expiresIn: "1h" //1h
             });
             res.json({ token });

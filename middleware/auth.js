@@ -15,10 +15,10 @@ module.exports = function (req, res, next) {
     try {
         const decoded = jwt.verify(token, process.env.jwtSecret);
         // Check if verified by admin
-        if (!decoded.user.auth) {
+        if (!decoded.isAuth) {
             return res.status(401).json({ msg: "Your account has not been verified by the admin" });
         }
-        req.user = decoded.user;
+        req.email = decoded.email;
         next();
     } catch (err) {
         res.status(401).json({ msg: "Token is not valid" });

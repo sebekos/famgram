@@ -4,9 +4,24 @@ const { check, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
+const auth = require("../middleware/auth");
 require("dotenv").config();
 
 const { User } = require("../sequelize");
+
+// @route       GET api/auth
+// @description Get user
+// @access      Public
+router.get("/", auth, async (req, res) => {
+    try {
+        const { email } = req;
+        const user = await User.findOne({ where: { email } });
+        const { uuid, auth } = user;
+        res.json({ email, userId: uuid, isAuth: auth });
+    } catch (err) {
+        res.status(500).send("Server Error");
+    }
+});
 
 // @route       POST api/auth
 // @description Authenticate user and get token

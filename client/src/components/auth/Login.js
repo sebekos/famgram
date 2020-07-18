@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { TextField, Button } from "@material-ui/core";
-import { connect } from "react-redux";
 
+import { connect } from "react-redux";
 import { login } from "../../redux/actions/auth";
+import { Redirect } from "react-router-dom";
 
 const LoginContainer = styled.div`
     width: max-content;
@@ -22,7 +23,7 @@ const FormContainer = styled.form`
     }
 `;
 
-const Login = ({ login }) => {
+const Login = ({ login, isAuth }) => {
     const [formData, setFormData] = useState({
         email: "",
         password: ""
@@ -42,6 +43,10 @@ const Login = ({ login }) => {
         login(email, password);
     };
 
+    if (isAuth) {
+        return <Redirect to="/dashboard" />;
+    }
+
     return (
         <LoginContainer>
             <FormContainer onSubmit={onSubmit}>
@@ -56,7 +61,7 @@ const Login = ({ login }) => {
 };
 
 const mapStateToProps = (state) => ({
-    auth: state.auth
+    isAuth: state.auth.isAuth
 });
 
 const mapDispatchToProps = {
