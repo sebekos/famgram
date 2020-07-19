@@ -4,7 +4,7 @@ const initialState = {
     token: localStorage.getItem("token"),
     email: null,
     userId: null,
-    isAuth: false
+    isAuth: 0
 };
 
 export default function (state = initialState, action) {
@@ -27,7 +27,10 @@ export default function (state = initialState, action) {
             localStorage.removeItem("token");
             return {
                 ...state,
-                token: null
+                token: null,
+                email: null,
+                userId: null,
+                isAuth: 0
             };
         default:
             return state;

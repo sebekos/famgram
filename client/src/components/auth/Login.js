@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { TextField, Button } from "@material-ui/core";
+import PropTypes from "prop-types";
 
 import { connect } from "react-redux";
 import { login } from "../../redux/actions/auth";
@@ -52,12 +53,17 @@ const Login = ({ login, isAuth }) => {
             <FormContainer onSubmit={onSubmit}>
                 <TextField name="email" type="text" onChange={onChange} value={email} label="Email" variant="filled" />
                 <TextField name="password" type="password" onChange={onChange} value={password} label="Password" variant="filled" />
-                <Button onClick={onSubmit} variant="contained" color="primary">
+                <Button type="submit" onClick={onSubmit} variant="contained" color="primary">
                     Login
                 </Button>
             </FormContainer>
         </LoginContainer>
     );
+};
+
+Login.propTypes = {
+    login: PropTypes.func.isRequired,
+    isAuth: PropTypes.number.isRequired
 };
 
 const mapStateToProps = (state) => ({

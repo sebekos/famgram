@@ -1,7 +1,8 @@
-import { SET_LOADING } from "../constants/constants";
+import { SET_LOADING, SET_DASH_TAB } from "../constants/constants";
 
 const initialState = {
-    loading: true
+    loading: true,
+    tab: 1
 };
 
 export default function (state = initialState, action) {
@@ -12,6 +13,11 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 loading: payload
+            };
+        case SET_DASH_TAB:
+            return {
+                ...state,
+                tab: payload
             };
         default:
             return state;
