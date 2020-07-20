@@ -1,5 +1,6 @@
 const Sequelize = require("sequelize");
 const UserModel = require("./models/user");
+const GalleryModel = require("./models/gallery");
 const dotenv = require("dotenv");
 require("dotenv").config();
 
@@ -10,6 +11,7 @@ const sequelize = new Sequelize(process.env.NODE_ENV === "production" ? process.
 });
 
 const User = UserModel(sequelize, Sequelize);
+const Gallery = GalleryModel(sequelize, Sequelize);
 
 try {
     sequelize.sync();
@@ -21,5 +23,6 @@ try {
 
 module.exports = {
     User,
+    Gallery,
     sequelize
 };

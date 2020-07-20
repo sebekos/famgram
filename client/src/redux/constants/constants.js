@@ -5,3 +5,5 @@ export const SET_LOADING = "SET_LOADING";
 export const USER_LOADED = "USER_LOADED";
 export const AUTH_ERROR = "AUTH_ERROR";
 export const SET_DASH_TAB = "SET_DASH_TAB";
+export const ADD_GALLERY = "ADD_GALLERY";
+export const GET_USER_GALLERIES = "GET_USER_GALLERIES";

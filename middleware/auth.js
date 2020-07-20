@@ -19,6 +19,7 @@ module.exports = function (req, res, next) {
             return res.status(401).json({ msg: "Your account has not been verified by the admin" });
         }
         req.email = decoded.email;
+        req.userId = decoded.userId;
         next();
     } catch (err) {
         res.status(401).json({ msg: "Token is not valid" });
