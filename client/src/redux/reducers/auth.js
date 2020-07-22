@@ -1,3 +1,4 @@
+import axios from "axios";
 import { LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT, USER_LOADED, AUTH_ERROR } from "../constants/constants";
 
 const initialState = {
@@ -12,6 +13,7 @@ export default function (state = initialState, action) {
     switch (type) {
         case LOGIN_SUCCESS:
             localStorage.setItem("token", payload.token);
+            axios.defaults.headers.common["x-auth-token"] = payload.token;
             return {
                 ...state,
                 ...payload
@@ -25,6 +27,7 @@ export default function (state = initialState, action) {
         case LOGOUT:
         case AUTH_ERROR:
             localStorage.removeItem("token");
+            delete axios.defaults.headers.common["x-auth-token"];
             return {
                 ...state,
                 token: null,

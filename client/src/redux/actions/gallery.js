@@ -13,6 +13,8 @@ export const userGalleries = () => async (dispatch) => {
         });
     } catch (err) {
         const errors = err.response.data.errors;
+        console.log(err);
+
         if (errors) {
             errors.forEach((error) => toast.error(error.msg));
         } else {
@@ -39,6 +41,7 @@ export const addGallery = (formData) => async (dispatch) => {
         toast.success("Gallery added");
     } catch (err) {
         const errors = err.response.data.errors;
+        console.log(err);
         if (errors) {
             errors.forEach((error) => toast.error(error.msg));
         } else {

@@ -11,7 +11,7 @@ export default function (state = initialState, action) {
         case ADD_GALLERY:
             return {
                 ...state,
-                mygalleries: [...state.mygalleries, payload]
+                mygalleries: [payload, ...state.mygalleries]
             };
         case GET_USER_GALLERIES:
             return {

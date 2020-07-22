@@ -36,7 +36,7 @@ const MyGalleries = ({ mygalleries }) => {
                         <div>{is_public}</div>
                         <div>
                             <Button variant="contained" color="secondary">
-                                Add
+                                Edit
                             </Button>
                         </div>
                     </StyledCard>
