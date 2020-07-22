@@ -24,7 +24,7 @@ const FormContainer = styled.form`
     }
 `;
 
-const Login = ({ login, isAuth }) => {
+const Login = ({ login, isAuth, tab }) => {
     const [formData, setFormData] = useState({
         email: "",
         password: ""
@@ -45,7 +45,7 @@ const Login = ({ login, isAuth }) => {
     };
 
     if (isAuth) {
-        return <Redirect to="/dashboard" />;
+        return <Redirect to={`/${tab}`} />;
     }
 
     return (
@@ -67,7 +67,8 @@ Login.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-    isAuth: state.auth.isAuth
+    isAuth: state.auth.isAuth,
+    tab: state.ui.tab
 });
 
 const mapDispatchToProps = {

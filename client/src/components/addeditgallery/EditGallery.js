@@ -1,8 +1,13 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { userGalleries } from "../../redux/actions/gallery";
-import { Card, Button } from "@material-ui/core";
+import { Card } from "@material-ui/core";
 import { uuid } from "uuidv4";
+import { useHistory } from "react-router-dom";
+import { IconButton } from "@material-ui/core";
+import AddAPhotoIcon from "@material-ui/icons/AddAPhoto";
+import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
+import EditIcon from "@material-ui/icons/Edit";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -16,29 +21,47 @@ const StyledCard = styled(Card)`
     max-width: 700px;
     padding: 1rem;
     display: grid;
-    grid-template-columns: 1fr 2fr 1fr 1fr;
+    grid-template-columns: 2fr 4fr 1fr 2fr;
+    align-items: center;
     & > div {
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        padding: 0 0.5rem;
     }
 `;
 
-const MyGalleries = ({ mygalleries }) => {
+const ButtonsContainer = styled.div`
+    display: flex;
+    justify-content: flex-end;
+`;
+
+const public_keys = {
+    0: "Private",
+    1: "Public"
+};
+
+const MyGalleries = ({ mygalleries, onNav }) => {
     return (
         <div>
             {mygalleries.map((item) => {
-                const { title, text, is_public } = item;
+                const { id, title, text, is_public } = item;
                 return (
                     <StyledCard key={uuid()}>
                         <div>{title}</div>
                         <div>{text}</div>
-                        <div>{is_public}</div>
-                        <div>
-                            <Button variant="contained" color="secondary">
-                                Edit
-                            </Button>
-                        </div>
+                        <div>{public_keys[is_public]}</div>
+                        <ButtonsContainer>
+                            <IconButton onClick={() => onNav("addmedia", id)} size="small">
+                                <AddAPhotoIcon fontSize="large" />
+                            </IconButton>
+                            <IconButton onClick={() => onNav("deletemedia", id)} size="small">
+                                <DeleteForeverIcon fontSize="large" />
+                            </IconButton>
+                            <IconButton onClick={() => onNav("editgallery", id)} size="small">
+                                <EditIcon fontSize="large" />
+                            </IconButton>
+                        </ButtonsContainer>
                     </StyledCard>
                 );
             })}
@@ -50,15 +73,23 @@ const EmptyGallery = () => {
     return <div>Empty</div>;
 };
 
-const EditGallery = ({ userGalleries, mygalleries }) => {
+const EditGallery = ({ userGalleries, mygalleries, mygalleriesfetch }) => {
     useEffect(() => {
-        userGalleries();
-    }, [userGalleries]);
-    return <Container>{mygalleries.length > 0 ? <MyGalleries mygalleries={mygalleries} /> : <EmptyGallery />}</Container>;
+        if (mygalleriesfetch) userGalleries();
+    }, [userGalleries, mygalleriesfetch]);
+
+    const history = useHistory();
+
+    const onNav = (link, id) => {
+        history.push(`/${link}/${id}`);
+    };
+
+    return <Container>{mygalleries.length > 0 ? <MyGalleries mygalleries={mygalleries} onNav={onNav} /> : <EmptyGallery />}</Container>;
 };
 
 const mapStateToProps = (state) => ({
-    mygalleries: state.gallery.mygalleries
+    mygalleries: state.gallery.mygalleries,
+    mygalleriesfetch: state.gallery.mygalleriesfetch
 });
 
 const mapDispatchToProps = {

@@ -1,5 +1,5 @@
 import React from "react";
-import { Redirect } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { connect } from "react-redux";
 import { setDashTab } from "../../redux/actions/ui";
 import { logout } from "../../redux/actions/auth";
@@ -9,11 +9,6 @@ import SearchIcon from "@material-ui/icons/Search";
 import AddIcon from "@material-ui/icons/Add";
 import PersonAddIcon from "@material-ui/icons/PersonAdd";
 import PropTypes from "prop-types";
-import styled from "styled-components";
-
-import Search from "../search/Search";
-import AddEditGallery from "../addeditgallery/AddEditGallery";
-import AddEditPerson from "../addeditperson/AddEditPerson";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -27,10 +22,24 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const MainToolBar = ({ setDashTab, logout }) => {
+const Dashboard = ({ isAuth, setDashTab, logout }) => {
+    const history = useHistory();
+
     const classes = useStyles();
-    const handleTabChange = (e) => setDashTab(parseInt(e.currentTarget.getAttribute("tabindex"), 10));
+
+    const handleTabChange = (e) => {
+        const route = e.currentTarget.getAttribute("route");
+        setDashTab(route);
+        history.push(`/${route}`);
+    };
+
     const onLogout = () => logout();
+
+    if (isAuth === 0) {
+        history.push("/");
+        return null;
+    }
+
     return (
         <>
             <AppBar position="fixed">
@@ -38,13 +47,13 @@ const MainToolBar = ({ setDashTab, logout }) => {
                     <Typography variant="h6" className={classes.title}>
                         Famgram
                     </Typography>
-                    <IconButton onClick={handleTabChange} tabIndex={0} color="inherit">
+                    <IconButton onClick={handleTabChange} route="search" color="inherit">
                         <SearchIcon />
                     </IconButton>
-                    <IconButton onClick={handleTabChange} tabIndex={1} color="inherit">
+                    <IconButton onClick={handleTabChange} route="addeditgallery" color="inherit">
                         <AddIcon />
                     </IconButton>
-                    <IconButton onClick={handleTabChange} tabIndex={2} color="inherit">
+                    <IconButton onClick={handleTabChange} route="addeditperson" color="inherit">
                         <PersonAddIcon />
                     </IconButton>
                     <Button onClick={onLogout} color="inherit">
@@ -52,31 +61,6 @@ const MainToolBar = ({ setDashTab, logout }) => {
                     </Button>
                 </Toolbar>
             </AppBar>
-        </>
-    );
-};
-
-MainToolBar.propTypes = {
-    setDashTab: PropTypes.func.isRequired,
-    logout: PropTypes.func.isRequired
-};
-
-const RouteContainer = styled.div`
-    margin-top: 5rem;
-`;
-
-const Dashboard = ({ isAuth, setDashTab, logout }) => {
-    if (isAuth === 0) {
-        return <Redirect to="/" />;
-    }
-    return (
-        <>
-            <MainToolBar setDashTab={setDashTab} logout={logout} />
-            <RouteContainer>
-                <Search />
-                <AddEditGallery />
-                <AddEditPerson />
-            </RouteContainer>
         </>
     );
 };

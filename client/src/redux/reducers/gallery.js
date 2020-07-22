@@ -2,7 +2,9 @@ import { ADD_GALLERY, GET_USER_GALLERIES } from "../constants/constants";
 
 const initialState = {
     mygalleries: [],
-    galleries: []
+    mygalleriesfetch: true,
+    galleries: [],
+    curGallery: null
 };
 
 export default function (state = initialState, action) {
@@ -16,7 +18,8 @@ export default function (state = initialState, action) {
         case GET_USER_GALLERIES:
             return {
                 ...state,
-                mygalleries: [...payload]
+                mygalleries: [...payload],
+                mygalleriesfetch: false
             };
         default:
             return state;
