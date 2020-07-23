@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const Dashboard = ({ isAuth, setDashTab, logout }) => {
+const Dashboard = ({ isAuth, setDashTab, logout, tab }) => {
     const history = useHistory();
 
     const classes = useStyles();
@@ -31,6 +31,10 @@ const Dashboard = ({ isAuth, setDashTab, logout }) => {
         const route = e.currentTarget.getAttribute("route");
         setDashTab(route);
         history.push(`/${route}`);
+        // if (route !== tab) {
+        //     setDashTab(route);
+        //     history.push(`/${route}`);
+        // }
     };
 
     const onLogout = () => logout();
@@ -68,11 +72,13 @@ const Dashboard = ({ isAuth, setDashTab, logout }) => {
 Dashboard.propTypes = {
     isAuth: PropTypes.number,
     setDashTab: PropTypes.func.isRequired,
-    logout: PropTypes.func.isRequired
+    logout: PropTypes.func.isRequired,
+    tab: PropTypes.string
 };
 
 const mapStateToProps = (state) => ({
-    isAuth: state.auth.isAuth
+    isAuth: state.auth.isAuth,
+    tab: state.ui.tab
 });
 
 const mapDispatchToProps = {

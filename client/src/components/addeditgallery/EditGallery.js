@@ -1,99 +1,114 @@
-import React, { useEffect } from "react";
-import { connect } from "react-redux";
-import { userGalleries } from "../../redux/actions/gallery";
-import { Card } from "@material-ui/core";
-import { uuid } from "uuidv4";
-import { useHistory } from "react-router-dom";
-import { IconButton } from "@material-ui/core";
-import AddAPhotoIcon from "@material-ui/icons/AddAPhoto";
-import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
-import EditIcon from "@material-ui/icons/Edit";
+import React, { useState } from "react";
 import styled from "styled-components";
+import { TextareaAutosize, TextField, Card, Button, Radio } from "@material-ui/core";
 
 const Container = styled.div`
-    margin: auto;
-    width: max-content;
+    padding: 1rem;
+    margin-top: 5rem;
 `;
 
 const StyledCard = styled(Card)`
-    margin: 0.5rem auto;
+    margin: auto;
     border: 1px solid #e8e8e8;
     max-width: 700px;
     padding: 1rem;
+`;
+
+const AddRow1 = styled.div`
     display: grid;
-    grid-template-columns: 2fr 4fr 1fr 2fr;
-    align-items: center;
-    & > div {
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        padding: 0 0.5rem;
+    grid-template-columns: 2fr 1fr;
+    & > div:first-child {
+        margin-right: 0.5rem;
     }
 `;
 
-const ButtonsContainer = styled.div`
-    display: flex;
-    justify-content: flex-end;
+const AddRow2 = styled.div``;
+
+const AddRow3 = styled.div`
+    margin: 0.5rem 0 0rem;
+    vertical-align: middle;
 `;
 
-const public_keys = {
-    0: "Private",
-    1: "Public"
-};
+const AddRow4 = styled.div`
+    margin: 0.5rem 0 0rem;
+`;
 
-const MyGalleries = ({ mygalleries, onNav }) => {
+const EditGallery = () => {
+    const [formData, setFormData] = useState({
+        title: "",
+        text: "",
+        pic_date: "",
+        is_public: 0
+    });
+
+    const { title, text, pic_date, is_public } = formData;
+
+    const onChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value
+        });
+    };
+
+    const onSubmit = () => {
+        console.log("submit");
+    };
+
     return (
-        <div>
-            {mygalleries.map((item) => {
-                const { id, title, text, is_public } = item;
-                return (
-                    <StyledCard key={uuid()}>
-                        <div>{title}</div>
-                        <div>{text}</div>
-                        <div>{public_keys[is_public]}</div>
-                        <ButtonsContainer>
-                            <IconButton onClick={() => onNav("addmedia", id)} size="small">
-                                <AddAPhotoIcon fontSize="large" />
-                            </IconButton>
-                            <IconButton onClick={() => onNav("deletemedia", id)} size="small">
-                                <DeleteForeverIcon fontSize="large" />
-                            </IconButton>
-                            <IconButton onClick={() => onNav("editgallery", id)} size="small">
-                                <EditIcon fontSize="large" />
-                            </IconButton>
-                        </ButtonsContainer>
-                    </StyledCard>
-                );
-            })}
-        </div>
+        <Container>
+            <StyledCard>
+                <AddRow1>
+                    <TextField
+                        autoComplete="off"
+                        onChange={onChange}
+                        label="Title"
+                        variant="filled"
+                        value={title}
+                        name="title"
+                        inputProps={{
+                            maxLength: 42
+                        }}
+                        helperText={`${title.length}/${42}`}
+                    />
+                    <TextField
+                        name="pic_date"
+                        variant="filled"
+                        id="pic_date"
+                        label="Date"
+                        type="date"
+                        onChange={onChange}
+                        value={pic_date}
+                        InputLabelProps={{
+                            shrink: true
+                        }}
+                    />
+                </AddRow1>
+                <AddRow2>
+                    <TextareaAutosize
+                        autoComplete="off"
+                        placeholder="Description"
+                        name="text"
+                        onChange={onChange}
+                        value={text}
+                        type="text"
+                        rowsMin={3}
+                        maxLength={500}
+                    />
+                </AddRow2>
+                <AddRow3>
+                    <Radio checked={parseInt(is_public) === 0} onChange={onChange} value={0} name="is_public" />
+                    Private
+                    <Radio checked={parseInt(is_public) === 1} onChange={onChange} value={1} name="is_public" />
+                    Public
+                </AddRow3>
+                <AddRow4>
+                    <Button onClick={onSubmit} variant="contained" color="primary">
+                        Add
+                    </Button>
+                </AddRow4>
+            </StyledCard>
+        </Container>
     );
 };
 
-const EmptyGallery = () => {
-    return <div>Empty</div>;
-};
-
-const EditGallery = ({ userGalleries, mygalleries, mygalleriesfetch }) => {
-    useEffect(() => {
-        if (mygalleriesfetch) userGalleries();
-    }, [userGalleries, mygalleriesfetch]);
-
-    const history = useHistory();
-
-    const onNav = (link, id) => {
-        history.push(`/${link}/${id}`);
-    };
-
-    return <Container>{mygalleries.length > 0 ? <MyGalleries mygalleries={mygalleries} onNav={onNav} /> : <EmptyGallery />}</Container>;
-};
-
-const mapStateToProps = (state) => ({
-    mygalleries: state.gallery.mygalleries,
-    mygalleriesfetch: state.gallery.mygalleriesfetch
-});
-
-const mapDispatchToProps = {
-    userGalleries
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(EditGallery);
+export default EditGallery;
