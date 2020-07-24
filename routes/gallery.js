@@ -20,6 +20,24 @@ router.get("/user", [auth], async (req, res) => {
     }
 });
 
+// @route       GET api/gallery/:id
+// @description Get single gallery
+// @access      Private
+router.get("/:id", [auth], async (req, res) => {
+    const userId = req.userId;
+    const gallery_id = req.params.id;
+    try {
+        const gallery = await Gallery.findOne({ where: { id: gallery_id, deleted: 0 } });
+        const { is_public, createdUser } = gallery;
+        if (is_public === 0 && userId !== createdUser) {
+            return res.status(401).json({ msg: "This gallery is private" });
+        }
+        res.json(gallery);
+    } catch (error) {
+        res.status(500).send("Server Error");
+    }
+});
+
 // @route       POST api/gallery/add
 // @description Add gallery
 // @access      Private
@@ -36,7 +54,7 @@ router.post(
         // Check inputs
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
+            return res.status(404).json({ msg: "Listing not found" });
         }
         const { title, text, pic_date, is_public } = req.body;
         const userId = req.userId;
