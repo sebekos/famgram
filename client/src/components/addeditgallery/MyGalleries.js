@@ -6,7 +6,6 @@ import { uuid } from "uuidv4";
 import { useHistory } from "react-router-dom";
 import { IconButton } from "@material-ui/core";
 import AddAPhotoIcon from "@material-ui/icons/AddAPhoto";
-import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import EditIcon from "@material-ui/icons/Edit";
 import styled from "styled-components";
 
@@ -55,9 +54,6 @@ const Galleries = ({ mygalleries, onNav }) => {
                             <IconButton onClick={() => onNav("addmedia", id)} size="small">
                                 <AddAPhotoIcon fontSize="large" />
                             </IconButton>
-                            {/* <IconButton onClick={() => onNav("deletemedia", id)} size="small">
-                                <DeleteForeverIcon fontSize="large" />
-                            </IconButton> */}
                             <IconButton onClick={() => onNav("editgallery", id)} size="small">
                                 <EditIcon fontSize="large" />
                             </IconButton>

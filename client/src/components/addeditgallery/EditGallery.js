@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { TextareaAutosize, TextField, Card, Button, Radio } from "@material-ui/core";
+import { connect } from "react-redux";
+import { getOneGallery } from "../../redux/actions/gallery";
 
 const Container = styled.div`
     padding: 1rem;
@@ -33,7 +35,11 @@ const AddRow4 = styled.div`
     margin: 0.5rem 0 0rem;
 `;
 
-const EditGallery = () => {
+const EditGallery = ({ getOneGallery, oneGallery, match }) => {
+    useEffect(() => {
+        getOneGallery(match.params.id);
+    }, [getOneGallery, match.params.id]);
+
     const [formData, setFormData] = useState({
         title: "",
         text: "",
@@ -111,4 +117,12 @@ const EditGallery = () => {
     );
 };
 
-export default EditGallery;
+const mapStateToProps = (state) => ({
+    oneGallery: state.gallery.oneGallery
+});
+
+const mapDispatchToProps = {
+    getOneGallery
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(EditGallery);

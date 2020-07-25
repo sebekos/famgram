@@ -1,5 +1,5 @@
 import axios from "axios";
-import { GET_USER_GALLERIES, ADD_GALLERY } from "../constants/constants";
+import { GET_USER_GALLERIES, ADD_GALLERY, GET_ONE_GALLERY } from "../constants/constants";
 import { toast } from "react-toastify";
 import { setLoading } from "./ui";
 
@@ -14,7 +14,25 @@ export const userGalleries = () => async (dispatch) => {
     } catch (err) {
         const errors = err.response.data.errors;
         console.log(err);
+        if (errors) {
+            errors.forEach((error) => toast.error(error.msg));
+        } else {
+            toast.error("Server Error");
+        }
+    }
+};
 
+// Get one gallery
+export const getOneGallery = (gallery_id) => async (dispatch) => {
+    try {
+        const res = await axios.get(`/api/gallery/${gallery_id}`);
+        dispatch({
+            type: GET_ONE_GALLERY,
+            payload: res.data
+        });
+    } catch (err) {
+        const errors = err.response.data.errors;
+        console.log(err);
         if (errors) {
             errors.forEach((error) => toast.error(error.msg));
         } else {
