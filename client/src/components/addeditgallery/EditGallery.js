@@ -35,7 +35,7 @@ const AddRow4 = styled.div`
     margin: 0.5rem 0 0rem;
 `;
 
-const EditGallery = ({ getOneGallery, oneGallery, match }) => {
+const EditGallery = ({ getOneGallery, oneGallery, match, loading }) => {
     useEffect(() => {
         getOneGallery(match.params.id);
     }, [getOneGallery, match.params.id]);
@@ -62,6 +62,7 @@ const EditGallery = ({ getOneGallery, oneGallery, match }) => {
 
     return (
         <Container>
+            {loading && <p>Loading...</p>}
             <StyledCard>
                 <AddRow1>
                     <TextField
@@ -118,7 +119,8 @@ const EditGallery = ({ getOneGallery, oneGallery, match }) => {
 };
 
 const mapStateToProps = (state) => ({
-    oneGallery: state.gallery.oneGallery
+    oneGallery: state.gallery.oneGallery,
+    loading: state.gallery.loading
 });
 
 const mapDispatchToProps = {
