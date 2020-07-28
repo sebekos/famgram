@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useLayoutEffect } from "react";
 import styled from "styled-components";
 import { TextareaAutosize, TextField, Card, Button, Radio } from "@material-ui/core";
 import { connect } from "react-redux";
-import { getOneGallery } from "../../redux/actions/gallery";
+import { getOneGallery, editGallery } from "../../redux/actions/gallery";
 
 const Container = styled.div`
     padding: 1rem;
@@ -35,19 +35,38 @@ const AddRow4 = styled.div`
     margin: 0.5rem 0 0rem;
 `;
 
-const EditGallery = ({ getOneGallery, oneGallery, match, loading }) => {
-    useEffect(() => {
-        getOneGallery(match.params.id);
-    }, [getOneGallery, match.params.id]);
+const LoadingContainer = styled.div`
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+`;
 
+const EditGallery = ({ getOneGallery, oneGallery, editGallery, match, loading }) => {
     const [formData, setFormData] = useState({
+        gallery_id: null,
         title: "",
         text: "",
         pic_date: "",
-        is_public: 0
+        is_public: -1
     });
 
-    const { title, text, pic_date, is_public } = formData;
+    useLayoutEffect(() => {
+        const param_id = parseInt(match.params.id, 10);
+        if (oneGallery === null || parseInt(oneGallery.id, 10) !== param_id) {
+            getOneGallery(param_id);
+        } else {
+            setFormData({
+                gallery_id: oneGallery.id,
+                title: oneGallery.title,
+                text: oneGallery.text,
+                pic_date: oneGallery.pic_date,
+                is_public: oneGallery.is_public
+            });
+        }
+    }, [getOneGallery, match.params.id, oneGallery]);
+
+    const { gallery_id, title, text, pic_date, is_public } = formData;
 
     const onChange = (e) => {
         setFormData({
@@ -57,12 +76,12 @@ const EditGallery = ({ getOneGallery, oneGallery, match, loading }) => {
     };
 
     const onSubmit = () => {
-        console.log("submit");
+        editGallery(formData);
     };
 
     return (
         <Container>
-            {loading && <p>Loading...</p>}
+            {loading && <LoadingContainer>Loading...</LoadingContainer>}
             <StyledCard>
                 <AddRow1>
                     <TextField
@@ -109,8 +128,8 @@ const EditGallery = ({ getOneGallery, oneGallery, match, loading }) => {
                     Public
                 </AddRow3>
                 <AddRow4>
-                    <Button onClick={onSubmit} variant="contained" color="primary">
-                        Add
+                    <Button onClick={onSubmit} variant="contained">
+                        Save
                     </Button>
                 </AddRow4>
             </StyledCard>
@@ -124,7 +143,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = {
-    getOneGallery
+    getOneGallery,
+    editGallery
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditGallery);

@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const { check, validationResult } = require("express-validator");
-const dotenv = require("dotenv");
 const auth = require("../middleware/auth");
+const dotenv = require("dotenv");
 require("dotenv").config();
 
 const { Gallery } = require("../sequelize");
@@ -54,7 +54,7 @@ router.post(
         // Check inputs
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            return res.status(404).json({ msg: "Listing not found" });
+            return res.status(400).json({ errors: errors.array() });
         }
         const { title, text, pic_date, is_public } = req.body;
         const userId = req.userId;
@@ -69,6 +69,54 @@ router.post(
         try {
             const createdGallery = await Gallery.create(galleryFields);
             res.json(createdGallery.dataValues);
+        } catch (error) {
+            res.status(500).send("Server Error");
+        }
+    }
+);
+
+// @route       POST api/gallery/edit
+// @description Edit gallery
+// @access      Private
+router.post(
+    "/edit",
+    [
+        auth,
+        check("gallery_id", "ID required").not().isEmpty(),
+        check("title", "Title must be between 6 and 42 characters").isLength({ min: 6, max: 42 }),
+        check("text", "Description must be between 6 and 500 characters").isLength({ min: 6, max: 500 }),
+        check("pic_date", "Date is required").isDate(),
+        check("is_public", "Public must be between 0 and 1").isInt({ min: 0, max: 1 })
+    ],
+    async (req, res) => {
+        // Check inputs
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+        // Check if exists and permission
+        const { gallery_id, title, text, pic_date, is_public } = req.body;
+        const gallery = await Gallery.findOne({ where: { id: gallery_id } });
+        if (!gallery) {
+            return res.status(401).json({ msg: "Gallery does not exist" });
+        }
+        // Check if user created
+        const { userId } = req;
+        const { createdUser } = gallery;
+        if (userId !== createdUser) {
+            return res.status(401).json({ msg: "This gallery is private" });
+        }
+        const galleryFields = {
+            title,
+            text,
+            pic_date,
+            is_public: parseInt(is_public, 10),
+            lastUser: userId
+        };
+        try {
+            let updatedGallery = await Gallery.update(galleryFields, { where: { id: gallery_id } });
+            updatedGallery = await Gallery.findOne({ where: { id: gallery_id } });
+            res.json(updatedGallery);
         } catch (error) {
             res.status(500).send("Server Error");
         }

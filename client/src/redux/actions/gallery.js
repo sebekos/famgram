@@ -1,10 +1,10 @@
 import axios from "axios";
-import { GET_USER_GALLERIES, ADD_GALLERY, GET_ONE_GALLERY } from "../constants/constants";
+import { GET_USER_GALLERIES, ADD_GALLERY, EDIT_GALLERY, GET_ONE_GALLERY, SET_GALLERY_LOADING, GALLERY_ERROR } from "../constants/constants";
 import { toast } from "react-toastify";
-import { setLoading } from "./ui";
 
 // Get user galleries
 export const userGalleries = () => async (dispatch) => {
+    dispatch(setGalleryLoading(true));
     try {
         const res = await axios.get("/api/gallery/user");
         dispatch({
@@ -17,6 +17,7 @@ export const userGalleries = () => async (dispatch) => {
         if (errors) {
             errors.forEach((error) => toast.error(error.msg));
         } else {
+            dispatch({ type: GALLERY_ERROR });
             toast.error("Server Error");
         }
     }
@@ -24,6 +25,7 @@ export const userGalleries = () => async (dispatch) => {
 
 // Get one gallery
 export const getOneGallery = (gallery_id) => async (dispatch) => {
+    dispatch(setGalleryLoading(true));
     try {
         const res = await axios.get(`/api/gallery/${gallery_id}`);
         dispatch({
@@ -31,6 +33,7 @@ export const getOneGallery = (gallery_id) => async (dispatch) => {
             payload: res.data
         });
     } catch (err) {
+        dispatch({ type: GALLERY_ERROR });
         const errors = err.response.data.errors;
         console.log(err);
         if (errors) {
@@ -43,7 +46,7 @@ export const getOneGallery = (gallery_id) => async (dispatch) => {
 
 // Add gallery
 export const addGallery = (formData) => async (dispatch) => {
-    dispatch(setLoading(true));
+    dispatch(setGalleryLoading(true));
     const config = {
         headers: {
             "Content-Type": "application/json"
@@ -58,6 +61,7 @@ export const addGallery = (formData) => async (dispatch) => {
         });
         toast.success("Gallery added");
     } catch (err) {
+        dispatch({ type: GALLERY_ERROR });
         const errors = err.response.data.errors;
         console.log(err);
         if (errors) {
@@ -66,5 +70,37 @@ export const addGallery = (formData) => async (dispatch) => {
             toast.error("Server Error");
         }
     }
-    dispatch(setLoading(false));
+};
+
+// Edit gallery
+export const editGallery = (formData) => async (dispatch) => {
+    dispatch(setGalleryLoading(true));
+    const config = {
+        headers: {
+            "Content-Type": "application/json"
+        }
+    };
+    const body = JSON.stringify(formData);
+    try {
+        const res = await axios.post("/api/gallery/edit", body, config);
+        dispatch({
+            type: EDIT_GALLERY,
+            payload: res.data
+        });
+        toast.success("Gallery updated");
+    } catch (err) {
+        dispatch({ type: GALLERY_ERROR });
+        const errors = err.response.data.errors;
+        console.log(err);
+        if (errors) {
+            errors.forEach((error) => toast.error(error.msg));
+        } else {
+            toast.error("Server Error");
+        }
+    }
+};
+
+// Set gallery loading
+export const setGalleryLoading = (payload) => async (dispatch) => {
+    dispatch({ type: SET_GALLERY_LOADING, payload });
 };
