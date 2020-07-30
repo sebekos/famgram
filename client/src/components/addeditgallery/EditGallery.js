@@ -1,8 +1,9 @@
 import React, { useState, useLayoutEffect } from "react";
-import styled from "styled-components";
 import { TextareaAutosize, TextField, Card, Button, Radio } from "@material-ui/core";
 import { connect } from "react-redux";
 import { getOneGallery, editGallery } from "../../redux/actions/gallery";
+import PropTypes from "prop-types";
+import styled from "styled-components";
 
 const Container = styled.div`
     padding: 1rem;
@@ -66,7 +67,7 @@ const EditGallery = ({ getOneGallery, oneGallery, editGallery, match, loading })
         }
     }, [getOneGallery, match.params.id, oneGallery]);
 
-    const { gallery_id, title, text, pic_date, is_public } = formData;
+    const { title, text, pic_date, is_public } = formData;
 
     const onChange = (e) => {
         setFormData({
@@ -135,6 +136,14 @@ const EditGallery = ({ getOneGallery, oneGallery, editGallery, match, loading })
             </StyledCard>
         </Container>
     );
+};
+
+EditGallery.propTypes = {
+    getOneGallery: PropTypes.func.isRequired,
+    oneGallery: PropTypes.object,
+    editGallery: PropTypes.func.isRequired,
+    match: PropTypes.object,
+    loading: PropTypes.bool.isRequired
 };
 
 const mapStateToProps = (state) => ({

@@ -1,9 +1,13 @@
 import React from "react";
 import { connect } from "react-redux";
+import styled from "styled-components";
 
-const AddMedia = ({ tab }) => {
-    if (tab !== 3) return null;
-    return <div>AddMedia</div>;
+const Container = styled.div`
+    margin-top: 5rem;
+`;
+
+const AddMedia = () => {
+    return <Container>AddMedia</Container>;
 };
 
 const mapStateToProps = (state) => ({
