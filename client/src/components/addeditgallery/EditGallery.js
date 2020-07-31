@@ -5,7 +5,6 @@ import { getOneGallery, editGallery } from "../../redux/actions/gallery";
 import { useHistory } from "react-router-dom";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import { setDashTab } from "../../redux/actions/ui";
 
 const Container = styled.div`
     padding: 1rem;
