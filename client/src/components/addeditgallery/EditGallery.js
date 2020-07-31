@@ -2,8 +2,10 @@ import React, { useState, useLayoutEffect } from "react";
 import { TextareaAutosize, TextField, Card, Button, Radio } from "@material-ui/core";
 import { connect } from "react-redux";
 import { getOneGallery, editGallery } from "../../redux/actions/gallery";
+import { useHistory } from "react-router-dom";
 import PropTypes from "prop-types";
 import styled from "styled-components";
+import { setDashTab } from "../../redux/actions/ui";
 
 const Container = styled.div`
     padding: 1rem;
@@ -34,6 +36,9 @@ const AddRow3 = styled.div`
 
 const AddRow4 = styled.div`
     margin: 0.5rem 0 0rem;
+    & > button {
+        margin-right: 0.5rem;
+    }
 `;
 
 const LoadingContainer = styled.div`
@@ -78,6 +83,12 @@ const EditGallery = ({ getOneGallery, oneGallery, editGallery, match, loading })
 
     const onSubmit = () => {
         editGallery(formData);
+    };
+
+    const history = useHistory();
+
+    const onBack = () => {
+        history.push(`/addeditgallery`);
     };
 
     return (
@@ -131,6 +142,9 @@ const EditGallery = ({ getOneGallery, oneGallery, editGallery, match, loading })
                 <AddRow4>
                     <Button onClick={onSubmit} variant="contained">
                         Save
+                    </Button>
+                    <Button onClick={onBack} variant="contained" color="secondary">
+                        Back
                     </Button>
                 </AddRow4>
             </StyledCard>
