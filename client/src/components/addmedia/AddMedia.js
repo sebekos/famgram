@@ -1,5 +1,6 @@
 import React from "react";
 import ImageUploading from "react-images-uploading";
+import { Button } from "@material-ui/core";
 import styled from "styled-components";
 
 const maxNumber = 10;
@@ -40,8 +41,12 @@ const AddMedia = () => {
             >
                 {({ imageList, onImageUpload, onImageRemoveAll }) => (
                     <div>
-                        <button onClick={onImageUpload}>Add images</button>
-                        <button onClick={onImageRemoveAll}>Remove all images</button>
+                        <Button onClick={onImageUpload} variant="contained">
+                            Add images
+                        </Button>
+                        <Button onClick={onImageRemoveAll} variant="contained">
+                            Remove all images
+                        </Button>
                         <ImagesContainer>
                             {imageList.map((image) => (
                                 <div key={image.key}>
