@@ -22,6 +22,13 @@ const ImagePreview = styled.img`
     max-width: 200px;
 `;
 
+const ButtonsContainer = styled.div`
+    width: max-content;
+    margin: 1rem auto;
+`;
+
+const RemoveButton = styled.button``;
+
 const AddMedia = () => {
     const onChange = (imageList) => {
         console.log(imageList);
@@ -41,17 +48,19 @@ const AddMedia = () => {
             >
                 {({ imageList, onImageUpload, onImageRemoveAll }) => (
                     <div>
-                        <Button onClick={onImageUpload} variant="contained">
-                            Add images
-                        </Button>
-                        <Button onClick={onImageRemoveAll} variant="contained">
-                            Remove all images
-                        </Button>
+                        <ButtonsContainer>
+                            <Button onClick={onImageUpload} variant="contained">
+                                Add images
+                            </Button>
+                            <Button onClick={onImageRemoveAll} variant="contained">
+                                Remove all images
+                            </Button>
+                        </ButtonsContainer>
                         <ImagesContainer>
                             {imageList.map((image) => (
                                 <div key={image.key}>
                                     <ImagePreview src={image.dataURL} alt="img" />
-                                    <button onClick={image.onRemove}>X</button>
+                                    <RemoveButton onClick={image.onRemove}>X</RemoveButton>
                                 </div>
                             ))}
                         </ImagesContainer>
