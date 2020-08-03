@@ -25,6 +25,7 @@ export default function (state = initialState, action) {
                     if (item.id === payload.id) return payload;
                     return item;
                 }),
+                oneGallery: payload,
                 loading: false
             };
         case GET_USER_GALLERIES:

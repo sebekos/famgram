@@ -11,7 +11,7 @@ import styled from "styled-components";
 
 const Container = styled.div`
     margin: auto;
-    width: max-content;
+    max-width: 700px;
 `;
 
 const StyledCard = styled(Card)`

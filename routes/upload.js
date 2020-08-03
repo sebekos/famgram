@@ -10,7 +10,7 @@ const FileType = require("file-type");
 const dotenv = require("dotenv");
 require("dotenv").config();
 
-const { Photo } = require("../sequelize");
+const { Photo, Gallery } = require("../sequelize");
 
 // configure the keys for accessing AWS
 AWS.config.update({
@@ -50,6 +50,14 @@ router.post("/", auth, (req, res) => {
         if (error) throw new Error(error);
         if (photoCnt % 2 !== 0 || photoCnt < 2) throw new Error("File error");
 
+        // Check gallery permissions
+        const gallery = await Gallery.findOne({ where: { id: gallery_id } });
+        const { userId } = req;
+        const { createdUser } = gallery;
+        if (userId !== createdUser) {
+            return res.status(401).json({ msg: "This gallery is private" });
+        }
+
         // Upload files
         let returnUrls = null;
         await Promise.all(
@@ -80,8 +88,8 @@ router.post("/", auth, (req, res) => {
                 link_main: returnUrls[i * 2],
                 link_thumb: returnUrls[i * 2 + 1],
                 deleted: 0,
-                createdUser: req.userId,
-                lastUser: req.userId
+                createdUser: userId,
+                lastUser: userId
             };
             await Photo.create(photoFields);
         }
