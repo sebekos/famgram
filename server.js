@@ -10,6 +10,7 @@ app.use("/api/user", require("./routes/user"));
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/gallery", require("./routes/gallery"));
 app.use("/api/person", require("./routes/person"));
+app.use("/api/upload", require("./routes/upload"));
 
 // Listen server
 const PORT = process.env.PORT || 5000;

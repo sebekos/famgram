@@ -1,9 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import ImageUploading from "react-images-uploading";
 import { Button } from "@material-ui/core";
+import { bulkResize } from "../../utils/photo";
+import { LinearProgress } from "@material-ui/core";
+import { Link } from "react-router-dom";
+import axios from "axios";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 
-const maxNumber = 10;
+const maxNumber = 25;
 const maxMbFileSize = 5 * 1024 * 1024; // 5Mb
 
 const Container = styled.div`
@@ -25,17 +30,103 @@ const ImagePreview = styled.img`
 const ButtonsContainer = styled.div`
     width: max-content;
     margin: 1rem auto;
+    & > button:first-child {
+        margin-right: 1rem;
+    }
 `;
 
-const RemoveButton = styled.button``;
+const UploadButtonContainer = styled.div`
+    width: max-content;
+    margin: auto;
+`;
 
-const AddMedia = () => {
+const RemoveButton = styled.button`
+    position: absolute;
+`;
+
+const ImageContainer = styled.div`
+    position: relative;
+    margin: 0.5rem;
+`;
+
+const ProgressContainer = styled.div`
+    margin: 1rem auto;
+`;
+
+const Progress = ({ progress }) => {
+    return (
+        <ProgressContainer>
+            <LinearProgress variant="determinate" value={progress} />
+        </ProgressContainer>
+    );
+};
+
+Progress.propTypes = {
+    progress: PropTypes.number.isRequired
+};
+
+const GoToGalleryContainer = styled.div`
+    margin: 1rem auto 3rem;
+    width: max-content;
+    & > a {
+        text-decoration: none;
+    }
+`;
+
+const GoToGallery = ({ gallery_id }) => {
+    return (
+        <GoToGalleryContainer>
+            <Link to={`/gallery/${gallery_id}`}>
+                <Button variant="contained">Go To Gallery</Button>
+            </Link>
+        </GoToGalleryContainer>
+    );
+};
+
+const AddMedia = ({ match }) => {
+    const [images, setImages] = useState([]);
+    const [progress, setProgress] = useState(0);
+    const [uploadSuccess, setUploadSuccess] = useState(false);
+
     const onChange = (imageList) => {
-        console.log(imageList);
+        setImages(imageList);
+        setProgress(0);
+        setUploadSuccess(false);
     };
+
     const onError = (errors, files) => {
         console.log(errors, files);
     };
+
+    const onUpload = async () => {
+        setProgress(0.1);
+        const filesList = images.map((item) => item.file);
+        let res = await bulkResize(filesList);
+        let formData = new FormData();
+        formData.append("gallery_id", match.params.id);
+        res.forEach((photo, index) => {
+            formData.append(`reg-${index}`, photo.reg);
+            formData.append(`thumb-${index}`, photo.thumbnail);
+        });
+        await axios
+            .post(`/api/upload`, formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data"
+                },
+                onUploadProgress: (progressEvent) => {
+                    const { loaded, total } = progressEvent;
+                    setProgress((loaded / total) * 100);
+                }
+            })
+            .then(() => {
+                setUploadSuccess(true);
+                setProgress(0);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
+
     return (
         <Container>
             <ImageUploading
@@ -45,6 +136,7 @@ const AddMedia = () => {
                 maxFileSize={maxMbFileSize}
                 acceptType={["jpg", "gif", "png"]}
                 onError={onError}
+                onUpload={onUpload}
             >
                 {({ imageList, onImageUpload, onImageRemoveAll }) => (
                     <div>
@@ -58,15 +150,25 @@ const AddMedia = () => {
                         </ButtonsContainer>
                         <ImagesContainer>
                             {imageList.map((image) => (
-                                <div key={image.key}>
-                                    <ImagePreview src={image.dataURL} alt="img" />
+                                <ImageContainer key={image.key}>
                                     <RemoveButton onClick={image.onRemove}>X</RemoveButton>
-                                </div>
+
+                                    <ImagePreview src={image.dataURL} alt="img" />
+                                </ImageContainer>
                             ))}
                         </ImagesContainer>
+                        {imageList.length > 0 && (
+                            <UploadButtonContainer>
+                                <Button variant="contained" onClick={onUpload}>
+                                    Upload
+                                </Button>
+                            </UploadButtonContainer>
+                        )}
                     </div>
                 )}
             </ImageUploading>
+            {progress > 0 && !uploadSuccess && <Progress progress={progress} />}
+            {uploadSuccess && <GoToGallery gallery_id={match.params.id} />}
         </Container>
     );
 };
