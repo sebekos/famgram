@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { TextField, Button } from "@material-ui/core";
 import PropTypes from "prop-types";
-
+import FamgramPng from "../../img/famgram.png";
 import { connect } from "react-redux";
 import { login } from "../../redux/actions/auth";
 import { Redirect } from "react-router-dom";
@@ -10,9 +10,14 @@ import { Redirect } from "react-router-dom";
 const LoginContainer = styled.div`
     width: max-content;
     position: fixed;
-    top: 45%;
+    top: 40%;
     left: 50%;
     transform: translate(-50%, -50%);
+`;
+
+const ImageContainer = styled.div`
+    width: max-content;
+    margin: 0 auto 2rem;
 `;
 
 const FormContainer = styled.form`
@@ -50,6 +55,9 @@ const Login = ({ login, isAuth, tab }) => {
 
     return (
         <LoginContainer>
+            <ImageContainer>
+                <img src={FamgramPng} alt="famgram" />
+            </ImageContainer>
             <FormContainer onSubmit={onSubmit}>
                 <TextField name="email" type="text" onChange={onChange} value={email} label="Email" variant="filled" />
                 <TextField name="password" type="password" onChange={onChange} value={password} label="Password" variant="filled" />

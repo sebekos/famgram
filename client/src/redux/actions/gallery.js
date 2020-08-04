@@ -1,5 +1,13 @@
 import axios from "axios";
-import { GET_USER_GALLERIES, ADD_GALLERY, EDIT_GALLERY, GET_ONE_GALLERY, SET_GALLERY_LOADING, GALLERY_ERROR } from "../constants/constants";
+import {
+    GET_USER_GALLERIES,
+    ADD_GALLERY,
+    EDIT_GALLERY,
+    GET_ONE_GALLERY,
+    GET_RECENT_GALLERIES,
+    SET_GALLERY_LOADING,
+    GALLERY_ERROR
+} from "../constants/constants";
 import { toast } from "react-toastify";
 
 // Get user galleries
@@ -27,9 +35,30 @@ export const userGalleries = () => async (dispatch) => {
 export const getOneGallery = (gallery_id) => async (dispatch) => {
     dispatch(setGalleryLoading(true));
     try {
-        const res = await axios.get(`/api/gallery/${gallery_id}`);
+        const res = await axios.get(`/api/gallery/single/${gallery_id}`);
         dispatch({
             type: GET_ONE_GALLERY,
+            payload: res.data
+        });
+    } catch (err) {
+        dispatch({ type: GALLERY_ERROR });
+        const errors = err.response.data.errors;
+        console.log(err);
+        if (errors) {
+            errors.forEach((error) => toast.error(error.msg));
+        } else {
+            toast.error("Server Error");
+        }
+    }
+};
+
+// Get recent galleries
+export const getRecentGalleries = () => async (dispatch) => {
+    dispatch(setGalleryLoading(true));
+    try {
+        const res = await axios.get(`/api/gallery/recent`);
+        dispatch({
+            type: GET_RECENT_GALLERIES,
             payload: res.data
         });
     } catch (err) {

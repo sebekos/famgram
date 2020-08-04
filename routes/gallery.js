@@ -5,7 +5,7 @@ const auth = require("../middleware/auth");
 const dotenv = require("dotenv");
 require("dotenv").config();
 
-const { Gallery } = require("../sequelize");
+const { Gallery, sequelize } = require("../sequelize");
 
 // @route       GET api/gallery/user
 // @description Get user galleries
@@ -23,7 +23,7 @@ router.get("/user", [auth], async (req, res) => {
 // @route       GET api/gallery/:id
 // @description Get single gallery
 // @access      Private
-router.get("/:id", [auth], async (req, res) => {
+router.get("/single/:id", [auth], async (req, res) => {
     const userId = req.userId;
     const gallery_id = req.params.id;
     try {
@@ -34,6 +34,33 @@ router.get("/:id", [auth], async (req, res) => {
         }
         res.json(gallery);
     } catch (error) {
+        res.status(500).send("Server Error");
+    }
+});
+
+// @route       GET api/gallery/recent
+// @description Get recent galleries
+// @access      Private
+router.get("/recent", [auth], async (req, res) => {
+    try {
+        const [results] = await sequelize.query(`
+            SELECT
+            MG.id,
+            MG.title,
+            MG.text,
+            MG.createdAt,
+            (SELECT link_thumb FROM famgram.photos AS MP WHERE MP.gallery_id = MG.id AND deleted = 0 LIMIT 1) AS thumb_1
+            FROM famgram.galleries AS MG
+            WHERE id IN(
+                SELECT DISTINCT MP.gallery_id FROM famgram.photos AS MP
+            )
+            AND deleted = 0
+            ORDER BY createdAt DESC
+            LIMIT 9;
+        `);
+        res.json(results);
+    } catch (error) {
+        console.log(error);
         res.status(500).send("Server Error");
     }
 });

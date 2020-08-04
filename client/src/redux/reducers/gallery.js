@@ -1,4 +1,12 @@
-import { ADD_GALLERY, EDIT_GALLERY, GET_USER_GALLERIES, GET_ONE_GALLERY, SET_GALLERY_LOADING, GALLERY_ERROR } from "../constants/constants";
+import {
+    ADD_GALLERY,
+    EDIT_GALLERY,
+    GET_USER_GALLERIES,
+    GET_ONE_GALLERY,
+    GET_RECENT_GALLERIES,
+    SET_GALLERY_LOADING,
+    GALLERY_ERROR
+} from "../constants/constants";
 
 const initialState = {
     mygalleries: [],
@@ -6,6 +14,7 @@ const initialState = {
     galleries: [],
     curGallery: null,
     oneGallery: null,
+    recentGalleries: [],
     loading: false
 };
 
@@ -38,6 +47,12 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 oneGallery: payload,
+                loading: false
+            };
+        case GET_RECENT_GALLERIES:
+            return {
+                ...state,
+                recentGalleries: payload,
                 loading: false
             };
         case SET_GALLERY_LOADING:
