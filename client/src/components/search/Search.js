@@ -5,7 +5,7 @@ import { Button, TextField } from "@material-ui/core";
 import Recent from "./Recent";
 
 const Container = styled.div`
-    margin-top: 5rem;
+    margin-top: 7rem;
 `;
 
 const Form = styled.form`

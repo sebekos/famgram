@@ -45,7 +45,7 @@ const Item = ({ data: { id, title, text, createdAt, thumb_1 } }) => {
     const classes = useStyles();
     return (
         <div className={classes.container}>
-            <Link to={`/gallery/${id}`} style={{ textDecoration: "none", color: "#333" }}>
+            <Link to={`/viewgallery/${id}`} style={{ textDecoration: "none", color: "#333" }}>
                 <Card className={classes.root} key={uuid()}>
                     <CardContent className={classes.content}>
                         <CardMedia className={classes.media} image={thumb_1} title="Paella dish" />

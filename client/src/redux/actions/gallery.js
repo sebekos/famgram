@@ -6,7 +6,8 @@ import {
     GET_ONE_GALLERY,
     GET_RECENT_GALLERIES,
     SET_GALLERY_LOADING,
-    GALLERY_ERROR
+    GALLERY_ERROR,
+    GET_VIEW_GALLERY
 } from "../constants/constants";
 import { toast } from "react-toastify";
 
@@ -59,6 +60,27 @@ export const getRecentGalleries = () => async (dispatch) => {
         const res = await axios.get(`/api/gallery/recent`);
         dispatch({
             type: GET_RECENT_GALLERIES,
+            payload: res.data
+        });
+    } catch (err) {
+        dispatch({ type: GALLERY_ERROR });
+        const errors = err.response.data.errors;
+        console.log(err);
+        if (errors) {
+            errors.forEach((error) => toast.error(error.msg));
+        } else {
+            toast.error("Server Error");
+        }
+    }
+};
+
+// Get view gallery
+export const getViewGallery = (gallery_id) => async (dispatch) => {
+    dispatch(setGalleryLoading(true));
+    try {
+        const res = await axios.get(`/api/gallery/viewgallery/${gallery_id}`);
+        dispatch({
+            type: GET_VIEW_GALLERY,
             payload: res.data
         });
     } catch (err) {

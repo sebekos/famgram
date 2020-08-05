@@ -7,7 +7,7 @@ import Item from "./Item";
 import PropTypes from "prop-types";
 
 const Container = styled.div`
-    margin: 5rem auto 0;
+    margin: 2rem auto 0;
     width: max-content;
 `;
 
@@ -21,7 +21,6 @@ const MapContainer = styled.div`
 `;
 
 const Map = ({ data }) => {
-    console.log(data);
     return (
         <MapContainer>
             {data.map((item) => (
