@@ -7,7 +7,8 @@ import {
     GET_RECENT_GALLERIES,
     SET_GALLERY_LOADING,
     GALLERY_ERROR,
-    GET_VIEW_GALLERY
+    GET_VIEW_GALLERY,
+    DELETE_GALLERY
 } from "../constants/constants";
 import { toast } from "react-toastify";
 
@@ -139,6 +140,29 @@ export const editGallery = (formData) => async (dispatch) => {
             payload: res.data
         });
         toast.success("Gallery updated");
+    } catch (err) {
+        dispatch({ type: GALLERY_ERROR });
+        const errors = err.response.data.errors;
+        console.log(err);
+        if (errors) {
+            errors.forEach((error) => toast.error(error.msg));
+        } else {
+            toast.error("Server Error");
+        }
+    }
+};
+
+// Delete gallery
+export const deleteGallery = (gallery_id, history) => async (dispatch) => {
+    dispatch(setGalleryLoading(true));
+    try {
+        const res = await axios.delete(`/api/gallery/delete/${gallery_id}`);
+        dispatch({
+            type: DELETE_GALLERY,
+            payload: res.data
+        });
+        history.push("/addeditgallery");
+        toast.success("Gallery deleted");
     } catch (err) {
         dispatch({ type: GALLERY_ERROR });
         const errors = err.response.data.errors;

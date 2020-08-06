@@ -76,7 +76,7 @@ const GoToGalleryContainer = styled.div`
 const GoToGallery = ({ gallery_id }) => {
     return (
         <GoToGalleryContainer>
-            <Link to={`/gallery/${gallery_id}`}>
+            <Link to={`/viewgallery/${gallery_id}`}>
                 <Button variant="contained">Go To Gallery</Button>
             </Link>
         </GoToGalleryContainer>

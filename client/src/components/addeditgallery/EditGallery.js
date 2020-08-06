@@ -1,7 +1,7 @@
 import React, { useState, useLayoutEffect } from "react";
 import { TextareaAutosize, TextField, Card, Button, Radio } from "@material-ui/core";
 import { connect } from "react-redux";
-import { getOneGallery, editGallery } from "../../redux/actions/gallery";
+import { getOneGallery, editGallery, deleteGallery } from "../../redux/actions/gallery";
 import { useHistory } from "react-router-dom";
 import PropTypes from "prop-types";
 import styled from "styled-components";
@@ -47,7 +47,7 @@ const LoadingContainer = styled.div`
     transform: translate(-50%, -50%);
 `;
 
-const EditGallery = ({ getOneGallery, oneGallery, editGallery, match, loading }) => {
+const EditGallery = ({ getOneGallery, oneGallery, editGallery, deleteGallery, match, loading }) => {
     const [formData, setFormData] = useState({
         gallery_id: null,
         title: "",
@@ -88,6 +88,10 @@ const EditGallery = ({ getOneGallery, oneGallery, editGallery, match, loading })
 
     const onBack = () => {
         history.push(`/addeditgallery`);
+    };
+
+    const onDelete = () => {
+        deleteGallery(match.params.id, history);
     };
 
     return (
@@ -142,8 +146,11 @@ const EditGallery = ({ getOneGallery, oneGallery, editGallery, match, loading })
                     <Button onClick={onSubmit} variant="contained">
                         Save
                     </Button>
-                    <Button onClick={onBack} variant="contained" color="secondary">
+                    <Button onClick={onBack} variant="contained" color="primary">
                         Back
+                    </Button>
+                    <Button onClick={onDelete} variant="contained" color="secondary">
+                        Delete
                     </Button>
                 </AddRow4>
             </StyledCard>
@@ -166,7 +173,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = {
     getOneGallery,
-    editGallery
+    editGallery,
+    deleteGallery
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditGallery);

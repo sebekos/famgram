@@ -40,15 +40,15 @@ const public_keys = {
     1: "Public"
 };
 
-const Galleries = ({ mygalleries, onNav }) => {
+const Galleries = ({ mygalleries, onNav, onGallery }) => {
     return (
         <div>
             {mygalleries.map((item) => {
                 const { id, title, text, is_public } = item;
                 return (
                     <StyledCard key={uuid()}>
-                        <div>{title}</div>
-                        <div>{text}</div>
+                        <div onClick={() => onGallery(id)}>{title}</div>
+                        <div onClick={() => onGallery(id)}>{text}</div>
                         <div>{public_keys[is_public]}</div>
                         <ButtonsContainer>
                             <IconButton onClick={() => onNav("addmedia", id)} size="small">
@@ -80,7 +80,15 @@ const MyGalleries = ({ userGalleries, mygalleries, mygalleriesfetch }) => {
         history.push(`/${link}/${id}`);
     };
 
-    return <Container>{mygalleries.length > 0 ? <Galleries mygalleries={mygalleries} onNav={onNav} /> : <EmptyGallery />}</Container>;
+    const onGallery = (id) => {
+        history.push(`/viewgallery/${id}`);
+    };
+
+    return (
+        <Container>
+            {mygalleries.length > 0 ? <Galleries mygalleries={mygalleries} onNav={onNav} onGallery={onGallery} /> : <EmptyGallery />}
+        </Container>
+    );
 };
 
 const mapStateToProps = (state) => ({

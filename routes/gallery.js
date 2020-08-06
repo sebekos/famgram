@@ -5,7 +5,7 @@ const auth = require("../middleware/auth");
 const dotenv = require("dotenv");
 require("dotenv").config();
 
-const { Gallery, sequelize } = require("../sequelize");
+const { Gallery, Photo, sequelize } = require("../sequelize");
 
 // @route       GET api/gallery/user
 // @description Get user galleries
@@ -13,7 +13,7 @@ const { Gallery, sequelize } = require("../sequelize");
 router.get("/user", [auth], async (req, res) => {
     const userId = req.userId;
     try {
-        const galleriesData = await Gallery.findAll({ where: { createdUser: userId } });
+        const galleriesData = await Gallery.findAll({ where: { createdUser: userId, deleted: 0 }, order: [["updatedAt", "DESC"]] });
         res.json(galleriesData);
     } catch (error) {
         res.status(500).send("Server Error");
@@ -61,6 +61,25 @@ router.get("/recent", [auth], async (req, res) => {
         res.json(results);
     } catch (error) {
         console.log(error);
+        res.status(500).send("Server Error");
+    }
+});
+
+// @route       GET api/gallery/viewgallery
+// @description Get gallery to display
+// @access      Private
+router.get("/viewgallery/:id", [auth], async (req, res) => {
+    const userId = req.userId;
+    const gallery_id = req.params.id;
+    try {
+        const gallery = await Gallery.findOne({ where: { id: gallery_id, deleted: 0 } });
+        const { is_public, createdUser } = gallery;
+        if (is_public === 0 && userId !== createdUser) {
+            return res.status(401).json({ msg: "This gallery is private" });
+        }
+        const photos = await Photo.findAll({ where: { gallery_id, deleted: 0 } });
+        res.json({ ...gallery, photos });
+    } catch (error) {
         res.status(500).send("Server Error");
     }
 });
@@ -149,5 +168,28 @@ router.post(
         }
     }
 );
+
+// @route       Delete api/gallery/delete/:id
+// @description Delete gallery
+// @access      Private
+router.delete("/delete/:id", [auth], async (req, res) => {
+    const userId = req.userId;
+    const gallery_id = req.params.id;
+    try {
+        const gallery = await Gallery.findOne({ where: { id: gallery_id, deleted: 0 } });
+        const { createdUser } = gallery;
+        if (userId !== createdUser) {
+            return res.status(401).json({ msg: "This gallery is private" });
+        }
+        const galleryFields = {
+            lastUser: userId,
+            deleted: 1
+        };
+        await Gallery.update(galleryFields, { where: { id: gallery_id } });
+        res.json({ id: gallery_id });
+    } catch (error) {
+        res.status(500).send("Server Error");
+    }
+});
 
 module.exports = router;

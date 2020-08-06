@@ -6,7 +6,8 @@ import {
     GET_RECENT_GALLERIES,
     SET_GALLERY_LOADING,
     GALLERY_ERROR,
-    GET_VIEW_GALLERY
+    GET_VIEW_GALLERY,
+    DELETE_GALLERY
 } from "../constants/constants";
 
 const initialState = {
@@ -67,6 +68,15 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 loading: payload
+            };
+        case DELETE_GALLERY:
+            const delete_id = parseInt(payload.id, 10);
+            return {
+                ...state,
+                mygalleries: state.mygalleries.filter((item) => item.id !== delete_id),
+                recentGalleries: state.recentGalleries.filter((item) => item.id !== delete_id),
+                galleries: state.galleries.filter((item) => item.id !== delete_id),
+                loading: false
             };
         case GALLERY_ERROR:
             return {
