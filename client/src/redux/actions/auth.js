@@ -1,7 +1,6 @@
 import axios from "axios";
 import { LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT, USER_LOADED, AUTH_ERROR } from "../constants/constants";
 import { toast } from "react-toastify";
-import { setLoading } from "./ui";
 import setAuthToken from "../utils/setAuthToken";
 
 // Load user
@@ -20,12 +19,10 @@ export const loadUser = () => async (dispatch) => {
             type: AUTH_ERROR
         });
     }
-    dispatch(setLoading(false));
 };
 
 // Login User
 export const login = (email, password) => async (dispatch) => {
-    dispatch(setLoading(true));
     const config = {
         headers: {
             "Content-Type": "application/json"
@@ -47,7 +44,6 @@ export const login = (email, password) => async (dispatch) => {
             type: LOGIN_FAIL
         });
     }
-    dispatch(setLoading(false));
 };
 
 // Logout

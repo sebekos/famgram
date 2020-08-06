@@ -5,7 +5,8 @@ const initialState = {
     token: localStorage.getItem("token"),
     email: null,
     userId: null,
-    isAuth: 0
+    isAuth: 0,
+    loading: true
 };
 
 export default function (state = initialState, action) {
@@ -16,12 +17,14 @@ export default function (state = initialState, action) {
             axios.defaults.headers.common["x-auth-token"] = payload.token;
             return {
                 ...state,
-                ...payload
+                ...payload,
+                loading: false
             };
         case USER_LOADED:
             return {
                 ...state,
-                ...payload
+                ...payload,
+                loading: false
             };
         case LOGIN_FAIL:
         case LOGOUT:
@@ -33,7 +36,8 @@ export default function (state = initialState, action) {
                 token: null,
                 email: null,
                 userId: null,
-                isAuth: 0
+                isAuth: 0,
+                loading: false
             };
         default:
             return state;

@@ -2,7 +2,7 @@ import { SET_LOADING, SET_DASH_TAB } from "../constants/constants";
 
 const initialState = {
     loading: true,
-    tab: "addeditgallery"
+    tab: "search"
 };
 
 export default function (state = initialState, action) {
