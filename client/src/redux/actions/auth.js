@@ -1,5 +1,5 @@
 import axios from "axios";
-import { LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT, USER_LOADED, AUTH_ERROR } from "../constants/constants";
+import { LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT, USER_LOADED, AUTH_ERROR, REGISTER_USER, REGISTER_FAIL } from "../constants/constants";
 import { toast } from "react-toastify";
 import setAuthToken from "../utils/setAuthToken";
 
@@ -42,6 +42,32 @@ export const login = (email, password) => async (dispatch) => {
         }
         dispatch({
             type: LOGIN_FAIL
+        });
+    }
+};
+
+// Register User
+export const register = (formData) => async (dispatch) => {
+    const config = {
+        headers: {
+            "Content-Type": "application/json"
+        }
+    };
+    const body = JSON.stringify(formData);
+    try {
+        await axios.post("/api/user", body, config);
+        toast.success("Registration complete, your account is awaiting approval");
+        dispatch({
+            type: REGISTER_USER
+        });
+    } catch (err) {
+        console.log(err);
+        const errors = err.response.data.errors;
+        if (errors) {
+            errors.forEach((error) => toast.error(error.msg));
+        }
+        dispatch({
+            type: REGISTER_FAIL
         });
     }
 };

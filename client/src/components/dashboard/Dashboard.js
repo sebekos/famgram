@@ -36,7 +36,7 @@ const Dashboard = ({ isAuth, setDashTab, logout }) => {
     const onLogout = () => logout();
 
     if (isAuth === 0) {
-        history.push("/");
+        // history.push("/");
         return null;
     }
 

@@ -8,6 +8,7 @@ const PrivateRoute = ({ component: Component, auth: { isAuth, loading }, setDash
     let location = useLocation();
     if (!isAuth) {
         setDashTab(location.pathname.substr(1));
+        return <Redirect to="/" />;
     }
     return <Route {...rest} render={(props) => (!isAuth && !loading ? <Redirect to="/" /> : <Component {...props} />)} />;
 };

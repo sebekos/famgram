@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { TextField, Button } from "@material-ui/core";
+import Typography from "@material-ui/core/Typography";
+import Box from "@material-ui/core/Box";
 import PropTypes from "prop-types";
 import FamgramPng from "../../img/famgram.png";
 import { connect } from "react-redux";
 import { login } from "../../redux/actions/auth";
-import { Redirect } from "react-router-dom";
+import { Redirect, Link } from "react-router-dom";
 
 const LoginContainer = styled.div`
     width: max-content;
@@ -64,6 +66,13 @@ const Login = ({ login, isAuth, tab }) => {
                 <Button type="submit" onClick={onSubmit} variant="contained" color="primary">
                     Login
                 </Button>
+                <Link to="/register" style={{ textDecoration: "none" }}>
+                    <Typography component="div">
+                        <Box fontSize="fontSize" m={1}>
+                            Don't have an account? Register
+                        </Box>
+                    </Typography>
+                </Link>
             </FormContainer>
         </LoginContainer>
     );

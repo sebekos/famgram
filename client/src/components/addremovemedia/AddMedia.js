@@ -30,8 +30,11 @@ const ImagePreview = styled.img`
 const ButtonsContainer = styled.div`
     width: max-content;
     margin: 1rem auto;
-    & > button:first-child {
-        margin-right: 1rem;
+    & > button {
+        margin-right: 0.5rem;
+    }
+    & > button:last-child {
+        margin-right: 0rem;
     }
 `;
 
@@ -147,6 +150,11 @@ const AddMedia = ({ match }) => {
                             <Button onClick={onImageRemoveAll} variant="contained">
                                 Remove all images
                             </Button>
+                            <Link to="/addeditgallery" style={{ textDecoration: "none" }}>
+                                <Button variant="contained" color="primary">
+                                    Back
+                                </Button>
+                            </Link>
                         </ButtonsContainer>
                         <ImagesContainer>
                             {imageList.map((image) => (

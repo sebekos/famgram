@@ -7,6 +7,7 @@ import { useHistory } from "react-router-dom";
 import { IconButton } from "@material-ui/core";
 import AddAPhotoIcon from "@material-ui/icons/AddAPhoto";
 import EditIcon from "@material-ui/icons/Edit";
+import MonochromePhotosIcon from "@material-ui/icons/MonochromePhotos";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -53,6 +54,9 @@ const Galleries = ({ mygalleries, onNav, onGallery }) => {
                         <ButtonsContainer>
                             <IconButton onClick={() => onNav("addmedia", id)} size="small">
                                 <AddAPhotoIcon fontSize="large" />
+                            </IconButton>
+                            <IconButton onClick={() => onNav("removemedia", id)} size="small">
+                                <MonochromePhotosIcon fontSize="large" />
                             </IconButton>
                             <IconButton onClick={() => onNav("editgallery", id)} size="small">
                                 <EditIcon fontSize="large" />
