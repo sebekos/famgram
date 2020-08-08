@@ -160,7 +160,6 @@ const AddMedia = ({ match }) => {
                             {imageList.map((image) => (
                                 <ImageContainer key={image.key}>
                                     <RemoveButton onClick={image.onRemove}>X</RemoveButton>
-
                                     <ImagePreview src={image.dataURL} alt="img" />
                                 </ImageContainer>
                             ))}
