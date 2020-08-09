@@ -169,6 +169,44 @@ router.post(
     }
 );
 
+// @route       POST api/gallery/savemedia
+// @description Save media
+// @access      Private
+router.post(
+    "/savemedia/:id",
+    [auth, check("gallery_id", "Gallery ID is required").not().isEmpty(), check("media_array", "Media array required").isArray()],
+    async (req, res) => {
+        // Check inputs
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+        // Check if exists and permission
+        const { gallery_id, media_array } = req.body;
+        const gallery = await Gallery.findOne({ where: { id: gallery_id } });
+        if (!gallery) {
+            return res.status(401).json({ msg: "Gallery does not exist" });
+        }
+        // Check if user created
+        const { userId } = req;
+        const { createdUser } = gallery;
+        if (userId !== createdUser) {
+            return res.status(401).json({ msg: "This gallery is not yours" });
+        }
+        try {
+            await sequelize.query(`
+                UPDATE famgram.photos SET
+                deleted = 1
+                WHERE gallery_id = ${gallery_id}
+                AND id NOT IN (${media_array.join(", ")})
+            `);
+            res.json(true);
+        } catch (error) {
+            res.status(500).send("Server Error");
+        }
+    }
+);
+
 // @route       Delete api/gallery/delete/:id
 // @description Delete gallery
 // @access      Private

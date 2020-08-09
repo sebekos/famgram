@@ -8,7 +8,9 @@ import {
     SET_GALLERY_LOADING,
     GALLERY_ERROR,
     GET_VIEW_GALLERY,
-    DELETE_GALLERY
+    DELETE_GALLERY,
+    REMOVE_MEDIA,
+    SAVE_MEDIA
 } from "../constants/constants";
 import { toast } from "react-toastify";
 
@@ -173,6 +175,39 @@ export const deleteGallery = (gallery_id, history) => async (dispatch) => {
             toast.error("Server Error");
         }
     }
+};
+
+// Save media
+export const saveMedia = (media_array, gallery_id) => async (dispatch) => {
+    dispatch(setGalleryLoading(true));
+    const config = {
+        headers: {
+            "Content-Type": "application/json"
+        }
+    };
+    const body = JSON.stringify({ media_array, gallery_id });
+    try {
+        const res = await axios.post(`/api/gallery/savemedia/${gallery_id}`, body, config);
+        dispatch({
+            type: SAVE_MEDIA,
+            payload: res.data
+        });
+        toast.success("Updated gallery");
+    } catch (err) {
+        dispatch({ type: GALLERY_ERROR });
+        const errors = err.response.data.errors;
+        console.log(err);
+        if (errors) {
+            errors.forEach((error) => toast.error(error.msg));
+        } else {
+            toast.error("Server Error");
+        }
+    }
+};
+
+// Remove gallery
+export const removeMedia = (payload) => async (dispatch) => {
+    dispatch({ type: REMOVE_MEDIA, payload });
 };
 
 // Set gallery loading

@@ -16,3 +16,5 @@ export const GET_VIEW_GALLERY = "GET_VIEW_GALLERY";
 export const DELETE_GALLERY = "DELETE_GALLERY";
 export const REGISTER_USER = "REGISTER_USER";
 export const REGISTER_FAIL = "REGISTER_FAIL";
+export const REMOVE_MEDIA = "REMOVE_MEDIA";
+export const SAVE_MEDIA = "SAVE_MEDIA";

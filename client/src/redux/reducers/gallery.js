@@ -7,7 +7,9 @@ import {
     SET_GALLERY_LOADING,
     GALLERY_ERROR,
     GET_VIEW_GALLERY,
-    DELETE_GALLERY
+    DELETE_GALLERY,
+    REMOVE_MEDIA,
+    SAVE_MEDIA
 } from "../constants/constants";
 
 const initialState = {
@@ -76,6 +78,19 @@ export default function (state = initialState, action) {
                 mygalleries: state.mygalleries.filter((item) => item.id !== delete_id),
                 recentGalleries: state.recentGalleries.filter((item) => item.id !== delete_id),
                 galleries: state.galleries.filter((item) => item.id !== delete_id),
+                loading: false
+            };
+        case REMOVE_MEDIA:
+            return {
+                ...state,
+                viewGallery: {
+                    ...state.viewGallery,
+                    photos: state.viewGallery.photos.filter((item) => item.id !== parseInt(payload, 10))
+                }
+            };
+        case SAVE_MEDIA:
+            return {
+                ...state,
                 loading: false
             };
         case GALLERY_ERROR:
