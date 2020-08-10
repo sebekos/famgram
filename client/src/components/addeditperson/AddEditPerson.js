@@ -1,7 +1,19 @@
 import React from "react";
+import styled from "styled-components";
+import AddPerson from "./AddPerson";
+import EditPerson from "./EditPerson";
+
+const Container = styled.div`
+    margin: 5rem auto 0;
+`;
 
 const AddEditPerson = () => {
-    return <div style={{ marginTop: "5rem" }}>AddEditPerson</div>;
+    return (
+        <Container>
+            <AddPerson />
+            <EditPerson />
+        </Container>
+    );
 };
 
 export default AddEditPerson;
