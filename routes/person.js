@@ -116,4 +116,27 @@ router.post(
     }
 );
 
+// @route       Delete api/person/delete/:id
+// @description Delete person
+// @access      Private
+router.delete("/delete/:id", [auth], async (req, res) => {
+    const { userId } = req;
+    const person_id = req.params.id;
+    try {
+        const person = await Person.findOne({ where: { id: person_id, deleted: 0 } });
+        const { createdUser } = person;
+        if (userId !== createdUser) {
+            return res.status(401).json({ msg: "You did not create this person" });
+        }
+        const personFields = {
+            lastUser: userId,
+            deleted: 1
+        };
+        await Person.update(personFields, { where: { id: person_id } });
+        res.json({ id: person_id });
+    } catch (error) {
+        res.status(500).send("Server Error");
+    }
+});
+
 module.exports = router;

@@ -1,6 +1,6 @@
 import React, { useState, useLayoutEffect } from "react";
 import { TextField, Card, Button } from "@material-ui/core";
-import { getPerson, editPerson } from "../../redux/actions/person";
+import { getPerson, editPerson, deletePerson } from "../../redux/actions/person";
 import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
@@ -35,7 +35,7 @@ const AddRow4 = styled.div`
     }
 `;
 
-const EditPerson = ({ editPerson, match, getPerson, person, loading }) => {
+const EditPerson = ({ editPerson, match, getPerson, person, deletePerson, loading }) => {
     const [formData, setFormData] = useState({
         id: "",
         first_name: "",
@@ -77,8 +77,15 @@ const EditPerson = ({ editPerson, match, getPerson, person, loading }) => {
         history.push("/addeditperson");
     };
 
+    const onDelete = () => {
+        var r = window.confirm("Are you sure you want to delete?");
+        if (r !== true) return;
+        deletePerson(match.params.id, history);
+    };
+
     return (
         <Container>
+            {/* {loading && <p>Loading...</p>} */}
             <StyledCard>
                 <AddRow>
                     <TextField
@@ -122,6 +129,9 @@ const EditPerson = ({ editPerson, match, getPerson, person, loading }) => {
                     <Button onClick={onBack} variant="contained">
                         Back
                     </Button>
+                    <Button onClick={onDelete} variant="contained" color="secondary">
+                        Delete
+                    </Button>
                 </AddRow4>
             </StyledCard>
         </Container>
@@ -135,7 +145,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = {
     editPerson,
-    getPerson
+    getPerson,
+    deletePerson
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditPerson);

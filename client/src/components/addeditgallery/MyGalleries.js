@@ -8,6 +8,7 @@ import { IconButton } from "@material-ui/core";
 import AddAPhotoIcon from "@material-ui/icons/AddAPhoto";
 import EditIcon from "@material-ui/icons/Edit";
 import MonochromePhotosIcon from "@material-ui/icons/MonochromePhotos";
+import LocalOfferIcon from "@material-ui/icons/LocalOffer";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -21,7 +22,7 @@ const StyledCard = styled(Card)`
     max-width: 700px;
     padding: 1rem;
     display: grid;
-    grid-template-columns: 2fr 4fr 1fr 2fr;
+    grid-template-columns: 2fr 3fr 1fr 2fr;
     align-items: center;
     & > div {
         white-space: nowrap;
@@ -50,8 +51,11 @@ const Galleries = ({ mygalleries, onNav, onGallery }) => {
                     <StyledCard key={uuid()}>
                         <div onClick={() => onGallery(id)}>{title}</div>
                         <div onClick={() => onGallery(id)}>{text}</div>
-                        <div>{public_keys[is_public]}</div>
+                        <div style={{ fontWeight: "bold" }}>{public_keys[is_public]}</div>
                         <ButtonsContainer>
+                            <IconButton size="small">
+                                <LocalOfferIcon fontSize="large" />
+                            </IconButton>
                             <IconButton onClick={() => onNav("addmedia", id)} size="small">
                                 <AddAPhotoIcon fontSize="large" />
                             </IconButton>

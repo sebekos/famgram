@@ -91,6 +91,8 @@ const EditGallery = ({ getOneGallery, oneGallery, editGallery, deleteGallery, ma
     };
 
     const onDelete = () => {
+        var r = window.confirm("Are you sure you want to delete?");
+        if (r !== true) return;
         deleteGallery(match.params.id, history);
     };
 

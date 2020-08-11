@@ -1,4 +1,4 @@
-import { ADD_PERSON, SET_PERSON_LOADING, PERSON_ERROR, GET_PEOPLE, GET_PERSON, EDIT_PERSON } from "../constants/constants";
+import { ADD_PERSON, SET_PERSON_LOADING, PERSON_ERROR, GET_PEOPLE, GET_PERSON, EDIT_PERSON, DELETE_PERSON } from "../constants/constants";
 
 const initialState = {
     person: null,
@@ -40,6 +40,13 @@ export default function (state = initialState, action) {
                     return item;
                 }),
                 person: payload,
+                loading: false
+            };
+        case DELETE_PERSON:
+            const delete_id = parseInt(payload.id, 10);
+            return {
+                ...state,
+                people: state.people.filter((item) => item.id !== delete_id),
                 loading: false
             };
         case PERSON_ERROR:

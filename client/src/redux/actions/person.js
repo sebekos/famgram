@@ -1,5 +1,5 @@
 import axios from "axios";
-import { ADD_PERSON, SET_PERSON_LOADING, PERSON_ERROR, GET_PEOPLE, GET_PERSON, EDIT_PERSON } from "../constants/constants";
+import { ADD_PERSON, SET_PERSON_LOADING, PERSON_ERROR, GET_PEOPLE, GET_PERSON, EDIT_PERSON, DELETE_PERSON } from "../constants/constants";
 import { toast } from "react-toastify";
 
 // Add person
@@ -88,6 +88,29 @@ export const editPerson = (formData) => async (dispatch) => {
             payload: res.data
         });
         toast.success("Person updated");
+    } catch (err) {
+        console.log(err);
+        dispatch({ type: PERSON_ERROR });
+        const errors = err.response.data.errors;
+        if (errors) {
+            errors.forEach((error) => toast.error(error.msg));
+        } else {
+            toast.error("Server Error");
+        }
+    }
+};
+
+// Delete person
+export const deletePerson = (person_id, history) => async (dispatch) => {
+    dispatch(setPersonLoading(true));
+    try {
+        const res = await axios.delete(`/api/person/delete/${person_id}`);
+        dispatch({
+            type: DELETE_PERSON,
+            payload: res.data
+        });
+        history.push("/addeditperson");
+        toast.success("Person deleted");
     } catch (err) {
         console.log(err);
         dispatch({ type: PERSON_ERROR });
