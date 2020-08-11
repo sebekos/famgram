@@ -1,4 +1,4 @@
-import { ADD_PERSON, SET_PERSON_LOADING, PERSON_ERROR, GET_PEOPLE } from "../constants/constants";
+import { ADD_PERSON, SET_PERSON_LOADING, PERSON_ERROR, GET_PEOPLE, GET_PERSON, EDIT_PERSON } from "../constants/constants";
 
 const initialState = {
     person: null,
@@ -15,6 +15,12 @@ export default function (state = initialState, action) {
                 people: payload,
                 loading: false
             };
+        case GET_PERSON:
+            return {
+                ...state,
+                person: payload,
+                loading: false
+            };
         case ADD_PERSON:
             return {
                 ...state,
@@ -25,6 +31,16 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 loading: true
+            };
+        case EDIT_PERSON:
+            return {
+                ...state,
+                people: state.people.map((item) => {
+                    if (item.id === payload.id) return payload;
+                    return item;
+                }),
+                person: payload,
+                loading: false
             };
         case PERSON_ERROR:
             return {
