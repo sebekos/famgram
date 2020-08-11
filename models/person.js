@@ -16,7 +16,7 @@ module.exports = (sequelize, type) => {
             type: type.STRING,
             allowNull: true,
             validate: {
-                len: [1, 42]
+                len: [0, 42]
             }
         },
         last_name: {

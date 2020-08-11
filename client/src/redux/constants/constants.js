@@ -18,3 +18,7 @@ export const REGISTER_USER = "REGISTER_USER";
 export const REGISTER_FAIL = "REGISTER_FAIL";
 export const REMOVE_MEDIA = "REMOVE_MEDIA";
 export const SAVE_MEDIA = "SAVE_MEDIA";
+export const ADD_PERSON = "ADD_PERSON";
+export const PERSON_ERROR = "PERSON_ERROR";
+export const SET_PERSON_LOADING = "SET_PERSON_LOADING";
+export const GET_PEOPLE = "GET_PEOPLE";

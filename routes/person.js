@@ -7,8 +7,20 @@ require("dotenv").config();
 
 const { Person } = require("../sequelize");
 
-// @route       POST api/gallery/add
-// @description Add gallery
+// @route       GET api/person/all
+// @description Get people
+// @access      Private
+router.get("/all", [auth], async (req, res) => {
+    try {
+        const peopleData = await Person.findAll({ where: { deleted: 0 }, order: [["updatedAt", "DESC"]] });
+        res.json(peopleData);
+    } catch (error) {
+        res.status(500).send("Server Error");
+    }
+});
+
+// @route       POST api/person/add
+// @description Add person
 // @access      Private
 router.post(
     "/add",

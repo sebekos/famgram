@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { TextField, Card, Button } from "@material-ui/core";
+import { addPerson } from "../../redux/actions/person";
+import { connect } from "react-redux";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -19,7 +21,7 @@ const AddRow = styled.div`
     & > div {
         margin-right: 0.5rem;
     }
-    &> div: last-child {
+    &>div: last-child {
         margin-right: 0rem;
     }
 `;
@@ -28,7 +30,7 @@ const AddRow4 = styled.div`
     margin: 0.5rem 0 0rem;
 `;
 
-const AddPerson = () => {
+const AddPerson = ({ addPerson }) => {
     const [formData, setFormData] = useState({
         first_name: "",
         middle_name: "",
@@ -44,8 +46,9 @@ const AddPerson = () => {
         });
     };
 
-    const onSubmit = () => {
-        console.log("add");
+    const onSubmit = (e) => {
+        e.preventDefault();
+        addPerson(formData);
     };
 
     return (
@@ -59,9 +62,9 @@ const AddPerson = () => {
                         variant="filled"
                         value={first_name}
                         inputProps={{
-                            maxLength: 24
+                            maxLength: 42
                         }}
-                        helperText={`${first_name.length}/${24}`}
+                        helperText={`${first_name.length}/${42}`}
                     />
                     <TextField
                         name="middle_name"
@@ -70,9 +73,9 @@ const AddPerson = () => {
                         variant="filled"
                         value={middle_name}
                         inputProps={{
-                            maxLength: 24
+                            maxLength: 42
                         }}
-                        helperText={`${middle_name.length}/${24}`}
+                        helperText={`${middle_name.length}/${42}`}
                     />
                     <TextField
                         name="last_name"
@@ -81,9 +84,9 @@ const AddPerson = () => {
                         variant="filled"
                         value={last_name}
                         inputProps={{
-                            maxLength: 40
+                            maxLength: 42
                         }}
-                        helperText={`${last_name.length}/${40}`}
+                        helperText={`${last_name.length}/${42}`}
                     />
                 </AddRow>
                 <AddRow4>
@@ -96,4 +99,8 @@ const AddPerson = () => {
     );
 };
 
-export default AddPerson;
+const mapDispatchToProps = {
+    addPerson
+};
+
+export default connect(null, mapDispatchToProps)(AddPerson);

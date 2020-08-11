@@ -19,6 +19,7 @@ import EditGallery from "./components/addeditgallery/EditGallery";
 import AddMedia from "./components/addremovemedia/AddMedia";
 import RemoveMedia from "./components/addremovemedia/RemoveMedia";
 import ViewGallery from "./components/viewgallery/ViewGallery";
+import EditPerson from "./components/addeditperson/EditPerson";
 
 const App = () => {
     useEffect(() => {
@@ -33,8 +34,9 @@ const App = () => {
                     <Route exact path="/" component={Login} />
                     <Route exact path="/register" component={Register} />
                     <PrivateRoute exact path="/search" component={Search} />
-                    <PrivateRoute exact path="/addeditgallery" component={AddEditGallery} />
                     <PrivateRoute exact path="/addeditperson" component={AddEditPerson} />
+                    <PrivateRoute exact path="/editperson/:id" component={EditPerson} />
+                    <PrivateRoute exact path="/addeditgallery" component={AddEditGallery} />
                     <PrivateRoute exact path="/editgallery/:id" component={EditGallery} />
                     <PrivateRoute exact path="/addmedia/:id" component={AddMedia} />
                     <PrivateRoute exact path="/removemedia/:id" component={RemoveMedia} />
