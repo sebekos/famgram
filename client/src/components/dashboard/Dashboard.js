@@ -45,7 +45,7 @@ const Dashboard = ({ isAuth, setDashTab, logout }) => {
             <AppBar position="fixed">
                 <Toolbar>
                     <Typography variant="h6" className={classes.title}>
-                        Famgram
+                        fam-gram
                     </Typography>
                     <IconButton onClick={handleTabChange} route="search" color="inherit">
                         <SearchIcon />

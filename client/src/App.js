@@ -20,6 +20,7 @@ import AddMedia from "./components/addremovemedia/AddMedia";
 import RemoveMedia from "./components/addremovemedia/RemoveMedia";
 import ViewGallery from "./components/viewgallery/ViewGallery";
 import EditPerson from "./components/addeditperson/EditPerson";
+import AddEditTags from "./components/addedittags/AddEditTags";
 
 const App = () => {
     useEffect(() => {
@@ -41,6 +42,7 @@ const App = () => {
                     <PrivateRoute exact path="/addmedia/:id" component={AddMedia} />
                     <PrivateRoute exact path="/removemedia/:id" component={RemoveMedia} />
                     <PrivateRoute exact path="/viewgallery/:id" component={ViewGallery} />
+                    <PrivateRoute exact path="/addedittags/:id" component={AddEditTags} />
                 </Switch>
             </Router>
         </Provider>

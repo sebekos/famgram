@@ -53,7 +53,7 @@ const Galleries = ({ mygalleries, onNav, onGallery }) => {
                         <div onClick={() => onGallery(id)}>{text}</div>
                         <div style={{ fontWeight: "bold" }}>{public_keys[is_public]}</div>
                         <ButtonsContainer>
-                            <IconButton size="small">
+                            <IconButton onClick={() => onNav("addedittags", id)} size="small">
                                 <LocalOfferIcon fontSize="large" />
                             </IconButton>
                             <IconButton onClick={() => onNav("addmedia", id)} size="small">
