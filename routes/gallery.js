@@ -207,6 +207,54 @@ router.post(
     }
 );
 
+// @route       POST api/gallery/addtag
+// @description Save media
+// @access      Private
+router.post(
+    "/addtag",
+    [
+        auth,
+        check("gallery_id", "Gallery ID is required").not().isEmpty(),
+        check("photo_id", "Photo ID is required").not().isEmpty(),
+        check("person_id", "Person ID is required").not().isEmpty()
+    ],
+    async (req, res) => {
+        // Check inputs
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
+        // Check if exists
+        const { gallery_id, photo_id, person_id } = req.body;
+        const gallery = await Gallery.findOne({ where: { id: gallery_id } });
+        if (!gallery) {
+            return res.status(401).json({ msg: "Gallery does not exist" });
+        }
+
+        // Check if user created public
+        const { userId } = req;
+        const { createdUser, is_public } = gallery;
+        if (is_public === 0 && userId !== createdUser) {
+            return res.status(401).json({ msg: "This gallery is private" });
+        }
+
+        // Check if photo in gallery
+
+        try {
+            await sequelize.query(`
+                UPDATE famgram.photos SET
+                deleted = 1
+                WHERE gallery_id = ${gallery_id}
+                AND id NOT IN (${media_array.join(", ")})
+            `);
+            res.json(true);
+        } catch (error) {
+            res.status(500).send("Server Error");
+        }
+    }
+);
+
 // @route       Delete api/gallery/delete/:id
 // @description Delete gallery
 // @access      Private
