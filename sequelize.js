@@ -3,6 +3,7 @@ const UserModel = require("./models/user");
 const GalleryModel = require("./models/gallery");
 const PersonModel = require("./models/person");
 const PhotoModel = require("./models/photo");
+const TagModel = require("./models/tag");
 const dotenv = require("dotenv");
 require("dotenv").config();
 
@@ -16,6 +17,7 @@ const User = UserModel(sequelize, Sequelize);
 const Gallery = GalleryModel(sequelize, Sequelize);
 const Person = PersonModel(sequelize, Sequelize);
 const Photo = PhotoModel(sequelize, Sequelize);
+const Tag = TagModel(sequelize, Sequelize);
 
 try {
     sequelize.sync();
@@ -30,5 +32,6 @@ module.exports = {
     Gallery,
     Person,
     Photo,
+    Tag,
     sequelize
 };

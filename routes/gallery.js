@@ -5,7 +5,7 @@ const auth = require("../middleware/auth");
 const dotenv = require("dotenv");
 require("dotenv").config();
 
-const { Gallery, Photo, sequelize } = require("../sequelize");
+const { Gallery, Photo, Tag, sequelize, Person } = require("../sequelize");
 
 // @route       GET api/gallery/user
 // @description Get user galleries
@@ -225,14 +225,14 @@ router.post(
             return res.status(400).json({ errors: errors.array() });
         }
 
-        // Check if exists
+        // Check if gallery exists
         const { gallery_id, photo_id, person_id } = req.body;
         const gallery = await Gallery.findOne({ where: { id: gallery_id } });
         if (!gallery) {
             return res.status(401).json({ msg: "Gallery does not exist" });
         }
 
-        // Check if user created public
+        // Check if user created or public
         const { userId } = req;
         const { createdUser, is_public } = gallery;
         if (is_public === 0 && userId !== createdUser) {
@@ -240,15 +240,27 @@ router.post(
         }
 
         // Check if photo in gallery
+        const photo = await Photo.findOne({ where: { id: photo_id } });
+        if (!photo || photo.gallery_id !== gallery_id) {
+            return res.status(401).json({ msg: "Photo not in gallery" });
+        }
+
+        // Check if person exists
+        const person = await Person.findOne({ where: { id: person_id } });
+        if (!person) {
+            return res.status(401).json({ msg: "Person does not exist" });
+        }
+
+        const tagFields = {
+            photo_id,
+            person_id,
+            createdUser: userId,
+            lastUser: userId
+        };
 
         try {
-            await sequelize.query(`
-                UPDATE famgram.photos SET
-                deleted = 1
-                WHERE gallery_id = ${gallery_id}
-                AND id NOT IN (${media_array.join(", ")})
-            `);
-            res.json(true);
+            const tagPhoto = await Tag.create(tagFields);
+            res.json(tagPhoto);
         } catch (error) {
             res.status(500).send("Server Error");
         }
