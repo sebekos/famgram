@@ -1,6 +1,7 @@
 import React, { useLayoutEffect } from "react";
 import { connect } from "react-redux";
 import { getViewGallery } from "../../redux/actions/gallery";
+import { Button } from "@material-ui/core";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -29,7 +30,7 @@ const Map = ({ photos }) => {
                             <img src={link_thumb} alt="..." />
                         </div>
                         <div>
-                            <p>persontag</p>
+                            <Button variant="contained">Add</Button>
                         </div>
                     </PhotoItem>
                 );
