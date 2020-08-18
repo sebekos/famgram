@@ -1,7 +1,7 @@
 import React, { useLayoutEffect } from "react";
 import { connect } from "react-redux";
 import { getViewGallery } from "../../redux/actions/gallery";
-import { Button } from "@material-ui/core";
+import PhotoItem from "./PhotoItem";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -13,27 +13,12 @@ const PhotoContainer = styled.div`
     margin: auto;
 `;
 
-const PhotoItem = styled.div`
-    margin: auto;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-`;
-
 const Map = ({ photos }) => {
     return (
         <PhotoContainer>
             {photos.map((item) => {
                 const { link_thumb } = item;
-                return (
-                    <PhotoItem>
-                        <div>
-                            <img src={link_thumb} alt="..." />
-                        </div>
-                        <div>
-                            <Button variant="contained">Add</Button>
-                        </div>
-                    </PhotoItem>
-                );
+                return <PhotoItem img={link_thumb} />;
             })}
         </PhotoContainer>
     );

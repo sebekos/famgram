@@ -11,5 +11,3 @@
     AWS_REGION=
     AWS_UPLOAD_FILE_URL=
 5. npm run dev
-
-MI test
