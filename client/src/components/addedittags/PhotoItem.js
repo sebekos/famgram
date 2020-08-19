@@ -1,16 +1,25 @@
-import React, { useState } from "react";
+import React from "react";
 import PersonItem from "./PersonItem";
+import styled from "styled-components";
+import { uuid } from "uuidv4";
 
-const PhotoItem = ({ img }) => {
+const Container = styled.div`
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+`;
+
+const PhotoItem = ({ img, people }) => {
     return (
-        <div>
+        <Container>
             <div>
                 <img src={img} alt="..." />
             </div>
             <div>
-                <PersonItem />
+                {people.map((item) => (
+                    <PersonItem key={uuid()} person={item} />
+                ))}
             </div>
-        </div>
+        </Container>
     );
 };
 

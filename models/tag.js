@@ -15,7 +15,8 @@ module.exports = (sequelize, type) => {
         },
         deleted: {
             type: type.INTEGER,
-            allowNull: false
+            allowNull: false,
+            defaultValue: 0
         },
         createdUser: {
             type: type.STRING,

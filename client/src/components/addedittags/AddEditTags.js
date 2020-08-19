@@ -1,6 +1,7 @@
 import React, { useLayoutEffect } from "react";
 import { connect } from "react-redux";
-import { getViewGallery } from "../../redux/actions/gallery";
+import { getGalleryTags } from "../../redux/actions/gallery";
+import { uuid } from "uuidv4";
 import PhotoItem from "./PhotoItem";
 import styled from "styled-components";
 
@@ -11,38 +12,41 @@ const Container = styled.div`
 
 const PhotoContainer = styled.div`
     margin: auto;
+    width: max-content;
 `;
 
-const Map = ({ photos }) => {
+const Map = ({ photos, people, tags }) => {
     return (
         <PhotoContainer>
             {photos.map((item) => {
                 const { link_thumb } = item;
-                return <PhotoItem img={link_thumb} />;
+                return <PhotoItem key={uuid()} img={link_thumb} people={people} />;
             })}
         </PhotoContainer>
     );
 };
 
-const AddEditTags = ({ getViewGallery, match, loading, viewGallery }) => {
+const AddEditTags = ({ getGalleryTags, match, loading, tags_photos, tags_people, tags }) => {
     useLayoutEffect(() => {
-        getViewGallery(match.params.id);
-    }, [getViewGallery, match.params.id]);
+        getGalleryTags(match.params.id);
+    }, [getGalleryTags, match.params.id]);
     return (
         <Container>
             {loading && <p>loading...</p>}
-            {!loading && viewGallery && <Map photos={viewGallery.photos} />}
+            {!loading && tags_photos && <Map photos={tags_photos} people={tags_people} tags={tags} />}
         </Container>
     );
 };
 
 const mapStateToProps = (state) => ({
-    viewGallery: state.gallery.viewGallery,
+    tags_photos: state.gallery.tags_photos,
+    tags_people: state.gallery.tags_people,
+    tags: state.gallery.tags,
     loading: state.gallery.loading
 });
 
 const mapDispatchToProps = {
-    getViewGallery
+    getGalleryTags
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddEditTags);

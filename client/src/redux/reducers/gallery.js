@@ -9,7 +9,8 @@ import {
     GET_VIEW_GALLERY,
     DELETE_GALLERY,
     REMOVE_MEDIA,
-    SAVE_MEDIA
+    SAVE_MEDIA,
+    GET_GALLERY_TAGS
 } from "../constants/constants";
 
 const initialState = {
@@ -20,6 +21,9 @@ const initialState = {
     oneGallery: null,
     recentGalleries: [],
     viewGallery: null,
+    tags: [],
+    tags_people: [],
+    tags_photos: [],
     loading: false
 };
 
@@ -91,6 +95,14 @@ export default function (state = initialState, action) {
         case SAVE_MEDIA:
             return {
                 ...state,
+                loading: false
+            };
+        case GET_GALLERY_TAGS:
+            return {
+                ...state,
+                tags: payload.tags,
+                tags_people: payload.people,
+                tags_photos: payload.photos,
                 loading: false
             };
         case GALLERY_ERROR:

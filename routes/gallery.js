@@ -251,6 +251,18 @@ router.post(
             return res.status(401).json({ msg: "Person does not exist" });
         }
 
+        // Check if tag already exists
+        const tag = await Tag.findOne({
+            where: {
+                photo_id,
+                person_id,
+                deleted: 0
+            }
+        });
+        if (tag) {
+            return res.status(401).json({ msg: "Tag already exists" });
+        }
+
         const tagFields = {
             photo_id,
             person_id,
@@ -262,10 +274,108 @@ router.post(
             const tagPhoto = await Tag.create(tagFields);
             res.json(tagPhoto);
         } catch (error) {
+            console.log(error);
             res.status(500).send("Server Error");
         }
     }
 );
+
+// @route       POST api/gallery/removetag
+// @description Remove tag
+// @access      Private
+router.post(
+    "/removetag",
+    [
+        auth,
+        check("gallery_id", "Gallery ID is required").not().isEmpty(),
+        check("photo_id", "Photo ID is required").not().isEmpty(),
+        check("person_id", "Person ID is required").not().isEmpty()
+    ],
+    async (req, res) => {
+        // Check inputs
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
+        // Check if gallery exists
+        const { gallery_id, photo_id, person_id } = req.body;
+        const gallery = await Gallery.findOne({ where: { id: gallery_id } });
+        if (!gallery) {
+            return res.status(401).json({ msg: "Gallery does not exist" });
+        }
+
+        // Check if user created or public
+        const { userId } = req;
+        const { createdUser, is_public } = gallery;
+        if (is_public === 0 && userId !== createdUser) {
+            return res.status(401).json({ msg: "This gallery is private" });
+        }
+
+        // Check if photo in gallery
+        const photo = await Photo.findOne({ where: { id: photo_id } });
+        if (!photo || photo.gallery_id !== gallery_id) {
+            return res.status(401).json({ msg: "Photo not in gallery" });
+        }
+
+        // Check if person exists
+        const person = await Person.findOne({ where: { id: person_id } });
+        if (!person) {
+            return res.status(401).json({ msg: "Person does not exist" });
+        }
+
+        // Find tag
+        const tag = await Tag.findOne({
+            where: {
+                photo_id,
+                person_id,
+                deleted: 0
+            }
+        });
+        if (!tag) {
+            return res.status(401).json({ msg: "Tag not found" });
+        }
+
+        const tagFields = {
+            lastUser: userId,
+            deleted: 1
+        };
+
+        try {
+            await Tag.update(tagFields, { where: { photo_id, person_id } });
+            res.json({ photo_id, person_id });
+        } catch (error) {
+            res.status(500).send("Server Error");
+        }
+    }
+);
+
+// @route       POST api/gallery/gallerytags
+// @description Get gallery tag data
+// @access      Private
+router.get("/gallerytags/:id", [auth], async (req, res) => {
+    const gallery_id = req.params.id;
+    try {
+        const photosData = await Photo.findAll({ where: { gallery_id, deleted: 0 } });
+        const peopleData = await Person.findAll({ where: { deleted: 0 }, order: [["updatedAt", "DESC"]] });
+        const [results] = await sequelize.query(`
+                SELECT 
+                * 
+                FROM famgram.tags 
+                WHERE photo_id IN(
+                    SELECT 
+                    id 
+                    FROM famgram.photos 
+                    WHERE gallery_id = 1 
+                    AND deleted = 0
+                )
+                AND deleted = 0
+            `);
+        res.json({ photos: photosData, people: peopleData, tags: results });
+    } catch (error) {
+        res.status(500).send("Server Error");
+    }
+});
 
 // @route       Delete api/gallery/delete/:id
 // @description Delete gallery

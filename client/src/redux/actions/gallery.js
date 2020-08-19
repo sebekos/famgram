@@ -10,7 +10,8 @@ import {
     GET_VIEW_GALLERY,
     DELETE_GALLERY,
     REMOVE_MEDIA,
-    SAVE_MEDIA
+    SAVE_MEDIA,
+    GET_GALLERY_TAGS
 } from "../constants/constants";
 import { toast } from "react-toastify";
 
@@ -42,6 +43,27 @@ export const getOneGallery = (gallery_id) => async (dispatch) => {
         const res = await axios.get(`/api/gallery/single/${gallery_id}`);
         dispatch({
             type: GET_ONE_GALLERY,
+            payload: res.data
+        });
+    } catch (err) {
+        dispatch({ type: GALLERY_ERROR });
+        const errors = err.response.data.errors;
+        console.log(err);
+        if (errors) {
+            errors.forEach((error) => toast.error(error.msg));
+        } else {
+            toast.error("Server Error");
+        }
+    }
+};
+
+// Get gallery tags
+export const getGalleryTags = (gallery_id) => async (dispatch) => {
+    dispatch(setGalleryLoading(true));
+    try {
+        const res = await axios.get(`/api/gallery/gallerytags/${gallery_id}`);
+        dispatch({
+            type: GET_GALLERY_TAGS,
             payload: res.data
         });
     } catch (err) {
