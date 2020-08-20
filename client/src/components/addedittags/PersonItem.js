@@ -1,30 +1,54 @@
-import React, { useState } from "react";
+import React from "react";
 import { Switch } from "@material-ui/core";
 import styled from "styled-components";
+import { connect } from "react-redux";
+import { addTag, removeTag } from "../../redux/actions/gallery";
 
 const Container = styled.div`
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr auto;
     margin: auto;
     text-align: center;
+    align-items: center;
+    justify-items: center;
 `;
 
-const PersonItem = ({ person }) => {
-    const [checked, setChecked] = useState(false);
+const NameContainer = styled.div``;
+
+const PersonItem = ({ person, addTag, removeTag, gallery_id, photo_id, isChecked }) => {
     const onCheck = () => {
-        setChecked(!checked);
+        if (isChecked) {
+            removeTag({
+                gallery_id,
+                person_id: person.id,
+                photo_id
+            });
+        } else {
+            addTag({
+                gallery_id,
+                person_id: person.id,
+                photo_id
+            });
+        }
     };
     const { first_name, last_name } = person;
     return (
         <Container>
-            <div>
+            <NameContainer>
                 {first_name} {last_name}
-            </div>
-            <div>
-                <Switch checked={checked} onChange={onCheck} inputProps={{ "aria-label": "secondary checkbox" }} />
-            </div>
+            </NameContainer>
+            <Switch checked={isChecked} onChange={onCheck} inputProps={{ "aria-label": "secondary checkbox" }} />
         </Container>
     );
 };
 
-export default PersonItem;
+const mapStateToProps = (state) => ({
+    tag: state.gallery.tags_photos
+});
+
+const mapDispatchToProps = {
+    addTag,
+    removeTag
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(PersonItem);

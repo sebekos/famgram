@@ -241,7 +241,7 @@ router.post(
 
         // Check if photo in gallery
         const photo = await Photo.findOne({ where: { id: photo_id } });
-        if (!photo || photo.gallery_id !== gallery_id) {
+        if (!photo || photo.gallery_id != gallery_id) {
             return res.status(401).json({ msg: "Photo not in gallery" });
         }
 
@@ -272,7 +272,7 @@ router.post(
 
         try {
             const tagPhoto = await Tag.create(tagFields);
-            res.json(tagPhoto);
+            res.json(tagPhoto.dataValues);
         } catch (error) {
             console.log(error);
             res.status(500).send("Server Error");
@@ -314,7 +314,7 @@ router.post(
 
         // Check if photo in gallery
         const photo = await Photo.findOne({ where: { id: photo_id } });
-        if (!photo || photo.gallery_id !== gallery_id) {
+        if (!photo || photo.gallery_id != gallery_id) {
             return res.status(401).json({ msg: "Photo not in gallery" });
         }
 
@@ -343,7 +343,7 @@ router.post(
 
         try {
             await Tag.update(tagFields, { where: { photo_id, person_id } });
-            res.json({ photo_id, person_id });
+            res.json(tag);
         } catch (error) {
             res.status(500).send("Server Error");
         }
@@ -366,7 +366,7 @@ router.get("/gallerytags/:id", [auth], async (req, res) => {
                     SELECT 
                     id 
                     FROM famgram.photos 
-                    WHERE gallery_id = 1 
+                    WHERE gallery_id = ${gallery_id}
                     AND deleted = 0
                 )
                 AND deleted = 0

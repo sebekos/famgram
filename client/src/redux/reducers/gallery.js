@@ -10,7 +10,9 @@ import {
     DELETE_GALLERY,
     REMOVE_MEDIA,
     SAVE_MEDIA,
-    GET_GALLERY_TAGS
+    GET_GALLERY_TAGS,
+    ADD_TAG,
+    REMOVE_TAG
 } from "../constants/constants";
 
 const initialState = {
@@ -103,6 +105,19 @@ export default function (state = initialState, action) {
                 tags: payload.tags,
                 tags_people: payload.people,
                 tags_photos: payload.photos,
+                loading: false
+            };
+        case ADD_TAG:
+            return {
+                ...state,
+                tags: [...state.tags, payload],
+                loading: false
+            };
+        case REMOVE_TAG:
+            const tag_id = parseInt(payload.id, 10);
+            return {
+                ...state,
+                tags: state.tags.filter((item) => item.id !== tag_id),
                 loading: false
             };
         case GALLERY_ERROR:

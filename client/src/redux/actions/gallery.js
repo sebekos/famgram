@@ -11,7 +11,9 @@ import {
     DELETE_GALLERY,
     REMOVE_MEDIA,
     SAVE_MEDIA,
-    GET_GALLERY_TAGS
+    GET_GALLERY_TAGS,
+    ADD_TAG,
+    REMOVE_TAG
 } from "../constants/constants";
 import { toast } from "react-toastify";
 
@@ -221,6 +223,63 @@ export const saveMedia = (media_array, gallery_id) => async (dispatch) => {
         console.log(err);
         if (errors) {
             errors.forEach((error) => toast.error(error.msg));
+        } else {
+            toast.error("Server Error");
+        }
+    }
+};
+
+// Add tag
+export const addTag = (formData) => async (dispatch) => {
+    const config = {
+        headers: {
+            "Content-Type": "application/json"
+        }
+    };
+    const body = JSON.stringify(formData);
+    try {
+        const res = await axios.post("/api/gallery/addtag", body, config);
+        dispatch({
+            type: ADD_TAG,
+            payload: res.data
+        });
+    } catch (err) {
+        dispatch({ type: GALLERY_ERROR });
+        const errors = err.response.data.errors;
+        const errorCheck = err.response.data;
+        if (errors) {
+            errors.forEach((error) => toast.error(error.msg));
+        } else if (errorCheck) {
+            toast.error(errorCheck.msg);
+        } else {
+            toast.error("Server Error");
+        }
+    }
+};
+
+// Remove tag
+export const removeTag = (formData) => async (dispatch) => {
+    const config = {
+        headers: {
+            "Content-Type": "application/json"
+        }
+    };
+    const body = JSON.stringify(formData);
+    try {
+        const res = await axios.post("/api/gallery/removetag", body, config);
+        console.log(res);
+        dispatch({
+            type: REMOVE_TAG,
+            payload: res.data
+        });
+    } catch (err) {
+        dispatch({ type: GALLERY_ERROR });
+        const errors = err.response.data.errors;
+        const errorCheck = err.response.data;
+        if (errors) {
+            errors.forEach((error) => toast.error(error.msg));
+        } else if (errorCheck) {
+            toast.error(errorCheck.msg);
         } else {
             toast.error("Server Error");
         }

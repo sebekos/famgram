@@ -6,7 +6,7 @@ import PhotoItem from "./PhotoItem";
 import styled from "styled-components";
 
 const Container = styled.div`
-    margin: 5rem auto 0;
+    margin: 5rem auto 1rem;
     width: max-content;
 `;
 
@@ -15,12 +15,15 @@ const PhotoContainer = styled.div`
     width: max-content;
 `;
 
-const Map = ({ photos, people, tags }) => {
+const Map = ({ photos, people, tags, gallery_id }) => {
     return (
         <PhotoContainer>
             {photos.map((item) => {
-                const { link_thumb } = item;
-                return <PhotoItem key={uuid()} img={link_thumb} people={people} />;
+                const { link_thumb, id } = item;
+                const tagged_people = tags.filter((cur_tag) => cur_tag.photo_id === id);
+                return (
+                    <PhotoItem key={uuid()} img={link_thumb} people={people} gallery_id={gallery_id} photo_id={id} tags={tagged_people} />
+                );
             })}
         </PhotoContainer>
     );
@@ -33,7 +36,7 @@ const AddEditTags = ({ getGalleryTags, match, loading, tags_photos, tags_people,
     return (
         <Container>
             {loading && <p>loading...</p>}
-            {!loading && tags_photos && <Map photos={tags_photos} people={tags_people} tags={tags} />}
+            {!loading && tags_photos && <Map photos={tags_photos} people={tags_people} tags={tags} gallery_id={match.params.id} />}
         </Container>
     );
 };
