@@ -9,7 +9,7 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 
 const maxNumber = 25;
-const maxMbFileSize = 5 * 1024 * 1024; // 5Mb
+const maxMbFileSize = 100 * 1024 * 1024; // 100Mb
 
 const Container = styled.div`
     width: max-content;
@@ -25,6 +25,7 @@ const ImagesContainer = styled.div`
 
 const ImagePreview = styled.img`
     max-width: 200px;
+    max-height: 150px;
 `;
 
 const ButtonsContainer = styled.div`
@@ -86,6 +87,11 @@ const GoToGallery = ({ gallery_id }) => {
     );
 };
 
+const Errors = styled.div`
+    width: max-content;
+    margin: auto;
+`;
+
 const AddMedia = ({ match }) => {
     const [images, setImages] = useState([]);
     const [progress, setProgress] = useState(0);
@@ -137,12 +143,18 @@ const AddMedia = ({ match }) => {
                 maxNumber={maxNumber}
                 multiple
                 maxFileSize={maxMbFileSize}
-                acceptType={["jpg", "gif", "png"]}
+                acceptType={[]}
                 onError={onError}
                 onUpload={onUpload}
             >
-                {({ imageList, onImageUpload, onImageRemoveAll }) => (
+                {({ imageList, onImageUpload, onImageRemoveAll, errors }) => (
                     <div>
+                        <Errors>
+                            {errors.maxNumber && <span>Number of selected images exceeds 25</span>}
+                            {errors.acceptType && <span>Your selected file type is not allow</span>}
+                            {errors.maxFileSize && <span>Selected file size exceed 100Mb</span>}
+                            {errors.resolution && <span>Selected file is not match your desired resolution</span>}
+                        </Errors>
                         <ButtonsContainer>
                             <Button onClick={onImageUpload} variant="contained">
                                 Add images

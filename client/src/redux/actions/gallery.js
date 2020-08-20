@@ -50,9 +50,11 @@ export const getOneGallery = (gallery_id) => async (dispatch) => {
     } catch (err) {
         dispatch({ type: GALLERY_ERROR });
         const errors = err.response.data.errors;
-        console.log(err);
+        const errorCheck = err.response.data;
         if (errors) {
             errors.forEach((error) => toast.error(error.msg));
+        } else if (errorCheck) {
+            toast.error(errorCheck.msg);
         } else {
             toast.error("Server Error");
         }
@@ -71,9 +73,11 @@ export const getGalleryTags = (gallery_id) => async (dispatch) => {
     } catch (err) {
         dispatch({ type: GALLERY_ERROR });
         const errors = err.response.data.errors;
-        console.log(err);
+        const errorCheck = err.response.data;
         if (errors) {
             errors.forEach((error) => toast.error(error.msg));
+        } else if (errorCheck) {
+            toast.error(errorCheck.msg);
         } else {
             toast.error("Server Error");
         }
@@ -92,9 +96,11 @@ export const getRecentGalleries = () => async (dispatch) => {
     } catch (err) {
         dispatch({ type: GALLERY_ERROR });
         const errors = err.response.data.errors;
-        console.log(err);
+        const errorCheck = err.response.data;
         if (errors) {
             errors.forEach((error) => toast.error(error.msg));
+        } else if (errorCheck) {
+            toast.error(errorCheck.msg);
         } else {
             toast.error("Server Error");
         }
@@ -113,9 +119,11 @@ export const getViewGallery = (gallery_id) => async (dispatch) => {
     } catch (err) {
         dispatch({ type: GALLERY_ERROR });
         const errors = err.response.data.errors;
-        console.log(err);
+        const errorCheck = err.response.data;
         if (errors) {
             errors.forEach((error) => toast.error(error.msg));
+        } else if (errorCheck) {
+            toast.error(errorCheck.msg);
         } else {
             toast.error("Server Error");
         }
@@ -141,9 +149,11 @@ export const addGallery = (formData) => async (dispatch) => {
     } catch (err) {
         dispatch({ type: GALLERY_ERROR });
         const errors = err.response.data.errors;
-        console.log(err);
+        const errorCheck = err.response.data;
         if (errors) {
             errors.forEach((error) => toast.error(error.msg));
+        } else if (errorCheck) {
+            toast.error(errorCheck.msg);
         } else {
             toast.error("Server Error");
         }
@@ -169,9 +179,11 @@ export const editGallery = (formData) => async (dispatch) => {
     } catch (err) {
         dispatch({ type: GALLERY_ERROR });
         const errors = err.response.data.errors;
-        console.log(err);
+        const errorCheck = err.response.data;
         if (errors) {
             errors.forEach((error) => toast.error(error.msg));
+        } else if (errorCheck) {
+            toast.error(errorCheck.msg);
         } else {
             toast.error("Server Error");
         }
@@ -192,9 +204,11 @@ export const deleteGallery = (gallery_id, history) => async (dispatch) => {
     } catch (err) {
         dispatch({ type: GALLERY_ERROR });
         const errors = err.response.data.errors;
-        console.log(err);
+        const errorCheck = err.response.data;
         if (errors) {
             errors.forEach((error) => toast.error(error.msg));
+        } else if (errorCheck) {
+            toast.error(errorCheck.msg);
         } else {
             toast.error("Server Error");
         }
@@ -220,9 +234,11 @@ export const saveMedia = (media_array, gallery_id) => async (dispatch) => {
     } catch (err) {
         dispatch({ type: GALLERY_ERROR });
         const errors = err.response.data.errors;
-        console.log(err);
+        const errorCheck = err.response.data;
         if (errors) {
             errors.forEach((error) => toast.error(error.msg));
+        } else if (errorCheck) {
+            toast.error(errorCheck.msg);
         } else {
             toast.error("Server Error");
         }

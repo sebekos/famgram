@@ -92,8 +92,11 @@ export const editPerson = (formData) => async (dispatch) => {
         console.log(err);
         dispatch({ type: PERSON_ERROR });
         const errors = err.response.data.errors;
+        const errorCheck = err.response.data;
         if (errors) {
             errors.forEach((error) => toast.error(error.msg));
+        } else if (errorCheck) {
+            toast.error(errorCheck.msg);
         } else {
             toast.error("Server Error");
         }
@@ -115,8 +118,11 @@ export const deletePerson = (person_id, history) => async (dispatch) => {
         console.log(err);
         dispatch({ type: PERSON_ERROR });
         const errors = err.response.data.errors;
+        const errorCheck = err.response.data;
         if (errors) {
             errors.forEach((error) => toast.error(error.msg));
+        } else if (errorCheck) {
+            toast.error(errorCheck.msg);
         } else {
             toast.error("Server Error");
         }
