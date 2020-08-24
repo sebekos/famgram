@@ -13,7 +13,8 @@ import {
     SAVE_MEDIA,
     GET_GALLERY_TAGS,
     ADD_TAG,
-    REMOVE_TAG
+    REMOVE_TAG,
+    PERSON_PHOTOS
 } from "../constants/constants";
 import { toast } from "react-toastify";
 
@@ -45,6 +46,29 @@ export const getOneGallery = (gallery_id) => async (dispatch) => {
         const res = await axios.get(`/api/gallery/single/${gallery_id}`);
         dispatch({
             type: GET_ONE_GALLERY,
+            payload: res.data
+        });
+    } catch (err) {
+        dispatch({ type: GALLERY_ERROR });
+        const errors = err.response.data.errors;
+        const errorCheck = err.response.data;
+        if (errors) {
+            errors.forEach((error) => toast.error(error.msg));
+        } else if (errorCheck) {
+            toast.error(errorCheck.msg);
+        } else {
+            toast.error("Server Error");
+        }
+    }
+};
+
+// Get person photos
+export const getPersonPhotos = (person_id) => async (dispatch) => {
+    dispatch(setGalleryLoading(true));
+    try {
+        const res = await axios.get(`/api/gallery/personphotos/${person_id}`);
+        dispatch({
+            type: PERSON_PHOTOS,
             payload: res.data
         });
     } catch (err) {

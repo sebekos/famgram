@@ -41,7 +41,7 @@ const useStyles = makeStyles({
     }
 });
 
-const Item = ({ data: { id, title, text, createdAt, thumb_1 } }) => {
+const Item = ({ data: { id, title, text, createdAt, thumb_1, pic_date } }) => {
     const classes = useStyles();
     return (
         <div className={classes.container}>
@@ -56,7 +56,7 @@ const Item = ({ data: { id, title, text, createdAt, thumb_1 } }) => {
                             {text}
                         </Typography>
                         <Typography className={classes.date} color="textSecondary" variant="body2" component="p" align="right">
-                            {timeFormat(createdAt)}
+                            {timeFormat(pic_date)}
                         </Typography>
                     </CardContent>
                 </Card>

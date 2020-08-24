@@ -49,13 +49,14 @@ router.get("/recent", [auth], async (req, res) => {
             MG.title,
             MG.text,
             MG.createdAt,
+            MG.pic_date,
             (SELECT link_thumb FROM famgram.photos AS MP WHERE MP.gallery_id = MG.id AND deleted = 0 LIMIT 1) AS thumb_1
             FROM famgram.galleries AS MG
             WHERE id IN(
                 SELECT DISTINCT MP.gallery_id FROM famgram.photos AS MP
             )
             AND deleted = 0
-            ORDER BY createdAt DESC
+            ORDER BY pic_date DESC
             LIMIT 9;
         `);
         res.json(results);
@@ -79,6 +80,28 @@ router.get("/viewgallery/:id", [auth], async (req, res) => {
         }
         const photos = await Photo.findAll({ where: { gallery_id, deleted: 0 } });
         res.json({ ...gallery, photos });
+    } catch (error) {
+        res.status(500).send("Server Error");
+    }
+});
+
+// @route       GET api/gallery/personphotos/:id
+// @description Get all of persons photos
+// @access      Private
+router.get("/personphotos/:id", [auth], async (req, res) => {
+    const person_id = req.params.id;
+    try {
+        const [results] = await sequelize.query(`
+        SELECT 
+        * 
+        FROM famgram.photos AS PH
+        INNER JOIN famgram.galleries AS GA
+        ON PH.gallery_id = GA.id
+        WHERE PH.id IN (
+            SELECT photo_id FROM famgram.tags WHERE person_id = ${person_id} AND deleted = 0
+        )
+        ORDER BY GA.pic_date ASC`);
+        res.json(results);
     } catch (error) {
         res.status(500).send("Server Error");
     }

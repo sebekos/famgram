@@ -12,7 +12,8 @@ import {
     SAVE_MEDIA,
     GET_GALLERY_TAGS,
     ADD_TAG,
-    REMOVE_TAG
+    REMOVE_TAG,
+    PERSON_PHOTOS
 } from "../constants/constants";
 
 const initialState = {
@@ -26,6 +27,7 @@ const initialState = {
     tags: [],
     tags_people: [],
     tags_photos: [],
+    person_photos: [],
     loading: false
 };
 
@@ -119,6 +121,11 @@ export default function (state = initialState, action) {
                 ...state,
                 tags: state.tags.filter((item) => item.id !== tag_id),
                 loading: false
+            };
+        case PERSON_PHOTOS:
+            return {
+                ...state,
+                person_photos: payload
             };
         case GALLERY_ERROR:
             return {

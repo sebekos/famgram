@@ -28,3 +28,4 @@ export const DELETE_PERSON = "DELETE_PERSON";
 export const GET_GALLERY_TAGS = "GET_GALLERY_TAGS";
 export const ADD_TAG = "ADD_TAG";
 export const REMOVE_TAG = "REMOVE_TAG";
+export const PERSON_PHOTOS = "PERSON_PHOTOS";
