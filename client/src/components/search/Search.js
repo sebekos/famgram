@@ -7,6 +7,8 @@ import { getPersonPhotos } from "../../redux/actions/gallery";
 import { uuid } from "uuidv4";
 
 import Recent from "./Recent";
+import PersonPhotos from "./PersonPhotos";
+import PhotoViewer from "../viewgallery/PhotoViewer";
 
 const Container = styled.div`
     margin-top: 7rem;
@@ -14,7 +16,7 @@ const Container = styled.div`
 
 const SelectContainer = styled.div`
     width: 500px;
-    margin: auto;
+    margin: 0 auto 3rem;
 `;
 
 const Search = ({ getPeople, people, person_photos, loading, getPersonPhotos }) => {
@@ -24,6 +26,8 @@ const Search = ({ getPeople, people, person_photos, loading, getPersonPhotos }) 
     const [age, setAge] = useState("Recent galleries");
     const handleChange = (event) => {
         setAge(event.target.value);
+        getPersonPhotos(event.target.value);
+        console.log(event.target.value);
     };
     return (
         <Container>
@@ -48,8 +52,9 @@ const Search = ({ getPeople, people, person_photos, loading, getPersonPhotos }) 
                     </Select>
                 </FormControl>
             </SelectContainer>
-
-            {age === "Recent galleries" && <Recent />}
+            {loading && <p>Loading</p>}
+            {age === "Recent galleries" && !loading && <Recent />}
+            {age !== "Recent galleries" && !loading && person_photos && person_photos.length > 0 && <PhotoViewer photos={person_photos} />}
         </Container>
     );
 };
