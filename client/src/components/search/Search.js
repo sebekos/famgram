@@ -7,8 +7,8 @@ import { getPersonPhotos } from "../../redux/actions/gallery";
 import { uuid } from "uuidv4";
 
 import Recent from "./Recent";
-import PersonPhotos from "./PersonPhotos";
 import PhotoViewer from "../viewgallery/PhotoViewer";
+import Spinner from "../universal/Spinner";
 
 const Container = styled.div`
     margin-top: 7rem;
@@ -19,7 +19,7 @@ const SelectContainer = styled.div`
     margin: 0 auto 3rem;
 `;
 
-const Search = ({ getPeople, people, person_photos, loading, getPersonPhotos }) => {
+const Search = ({ getPeople, people, person_photos, person_loading, gallery_loading, getPersonPhotos }) => {
     useLayoutEffect(() => {
         getPeople();
     }, [getPeople]);
@@ -27,7 +27,6 @@ const Search = ({ getPeople, people, person_photos, loading, getPersonPhotos }) 
     const handleChange = (event) => {
         setAge(event.target.value);
         getPersonPhotos(event.target.value);
-        console.log(event.target.value);
     };
     return (
         <Container>
@@ -42,7 +41,7 @@ const Search = ({ getPeople, people, person_photos, loading, getPersonPhotos }) 
                         label="Select person or gallery"
                     >
                         <MenuItem value="Recent galleries">Recent galleries</MenuItem>
-                        {!loading && people
+                        {!person_loading && people
                             ? people.map((item) => (
                                   <MenuItem key={uuid()} value={item.id}>
                                       {item.first_name} {item.last_name}
@@ -52,9 +51,9 @@ const Search = ({ getPeople, people, person_photos, loading, getPersonPhotos }) 
                     </Select>
                 </FormControl>
             </SelectContainer>
-            {loading && <p>Loading</p>}
-            {age === "Recent galleries" && !loading && <Recent />}
-            {age !== "Recent galleries" && !loading && person_photos && person_photos.length > 0 && <PhotoViewer photos={person_photos} />}
+            {person_loading || (gallery_loading && <Spinner />)}
+            {age === "Recent galleries" && !person_loading && <Recent />}
+            {age !== "Recent galleries" && !person_loading && person_photos && <PhotoViewer photos={person_photos} />}
         </Container>
     );
 };
@@ -62,7 +61,8 @@ const Search = ({ getPeople, people, person_photos, loading, getPersonPhotos }) 
 const mapStateToProps = (state) => ({
     person_photos: state.gallery.person_photos,
     people: state.person.people,
-    loading: state.person.loading
+    person_loading: state.person.loading,
+    gallery_loading: state.gallery.loading
 });
 
 const mapDispatchToProps = { getPeople, getPersonPhotos };

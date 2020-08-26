@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 
 const Container = styled.div`
     margin: auto;
-    width: fit-content;
+    width: max-content;
     display: grid;
     grid-template-columns: repeat(5, 200px);
     @media (max-width: 768px) {
@@ -42,17 +42,30 @@ Image.propTypes = {
     onClickThumbnail: PropTypes.func.isRequired
 };
 
+const EmptyContainer = styled.div`
+    width: max-content;
+    margin: auto;
+`;
+
+const Empty = () => {
+    return <EmptyContainer>No Tagged Photos</EmptyContainer>;
+};
+
 const PreviewPhotos = ({ onClickThumbnail, photos }) => {
     return (
-        <Container>
-            {photos.map((photo) => {
-                return (
-                    <Image onClickThumbnail={onClickThumbnail} key={uuid()} link_thumb={photo.link_thumb}>
-                        photo
-                    </Image>
-                );
-            })}
-        </Container>
+        <>
+            {photos.length === 0 && <Empty />}
+            <Container>
+                {photos.length > 0 &&
+                    photos.map((photo) => {
+                        return (
+                            <Image onClickThumbnail={onClickThumbnail} key={uuid()} link_thumb={photo.link_thumb}>
+                                photo
+                            </Image>
+                        );
+                    })}
+            </Container>
+        </>
     );
 };
 

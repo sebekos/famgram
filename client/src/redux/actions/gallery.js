@@ -307,7 +307,6 @@ export const removeTag = (formData) => async (dispatch) => {
     const body = JSON.stringify(formData);
     try {
         const res = await axios.post("/api/gallery/removetag", body, config);
-        console.log(res);
         dispatch({
             type: REMOVE_TAG,
             payload: res.data

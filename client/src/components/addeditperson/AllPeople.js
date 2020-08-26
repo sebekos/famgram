@@ -7,6 +7,7 @@ import { uuid } from "uuidv4";
 import { useHistory } from "react-router-dom";
 import EditIcon from "@material-ui/icons/Edit";
 import styled from "styled-components";
+import Spinner from "../universal/Spinner";
 
 const StyledCard = styled(Card)`
     margin: 0.5rem auto;
@@ -59,7 +60,7 @@ const EditPerson = ({ getPeople, loading, people }) => {
 
     return (
         <div>
-            {loading && <p>loading...</p>}
+            {loading && <Spinner />}
             {!loading && people && <People people={people} onEdit={onEdit} />}
         </div>
     );

@@ -11,14 +11,26 @@ const Container = styled.div`
 
 const ImgContainer = styled.div``;
 
+const EmptyContainer = styled.div`
+    width: max-content;
+    margin: 3rem auto;
+`;
+
+const Empty = () => {
+    return <EmptyContainer>No Recent Galleries</EmptyContainer>;
+};
+
 const PersonPhotos = ({ person_photos }) => {
+    console.log(person_photos);
     return (
         <Container>
-            {person_photos.map((item) => (
-                <ImgContainer key={uuid()}>
-                    <img src={item.link_thumb} alt="..." />
-                </ImgContainer>
-            ))}
+            {person_photos.length === 0 && <Empty />}
+            {person_photos.length > 0 &&
+                person_photos.map((item) => (
+                    <ImgContainer key={uuid()}>
+                        <img src={item.link_thumb} alt="..." />
+                    </ImgContainer>
+                ))}
         </Container>
     );
 };

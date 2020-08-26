@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { TextField, Button } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import PropTypes from "prop-types";
 import FamgramPng from "../../img/famgram.png";
+import Spinner from "../universal/Spinner";
 import { connect } from "react-redux";
 import { login } from "../../redux/actions/auth";
 import { Redirect, Link } from "react-router-dom";
+import { TextField, Button } from "@material-ui/core";
 
 const LoginContainer = styled.div`
     width: max-content;
@@ -31,7 +32,7 @@ const FormContainer = styled.form`
     }
 `;
 
-const Login = ({ login, isAuth, tab }) => {
+const Login = ({ login, isAuth, tab, loading }) => {
     const [formData, setFormData] = useState({
         email: "",
         password: ""
@@ -57,6 +58,7 @@ const Login = ({ login, isAuth, tab }) => {
 
     return (
         <LoginContainer>
+            {loading && <Spinner />}
             <ImageContainer>
                 <img src={FamgramPng} alt="famgram" />
             </ImageContainer>
@@ -85,7 +87,8 @@ Login.propTypes = {
 
 const mapStateToProps = (state) => ({
     isAuth: state.auth.isAuth,
-    tab: state.ui.tab
+    tab: state.ui.tab,
+    loading: state.auth.loading
 });
 
 const mapDispatchToProps = {

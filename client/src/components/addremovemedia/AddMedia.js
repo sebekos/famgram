@@ -13,7 +13,7 @@ const maxMbFileSize = 100 * 1024 * 1024; // 100Mb
 
 const Container = styled.div`
     width: max-content;
-    margin: 5rem auto 0;
+    margin: 5rem auto 3rem;
 `;
 
 const ImagesContainer = styled.div`

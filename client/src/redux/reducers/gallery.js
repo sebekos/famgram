@@ -54,7 +54,8 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 mygalleries: [...payload],
-                mygalleriesfetch: false
+                mygalleriesfetch: false,
+                loading: false
             };
         case GET_ONE_GALLERY:
             return {
@@ -125,7 +126,8 @@ export default function (state = initialState, action) {
         case PERSON_PHOTOS:
             return {
                 ...state,
-                person_photos: payload
+                person_photos: payload,
+                loading: false
             };
         case GALLERY_ERROR:
             return {

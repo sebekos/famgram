@@ -92,7 +92,7 @@ const AddGallery = ({ addGallery }) => {
                         onChange={onChange}
                         value={text}
                         type="text"
-                        rowsMin={3}
+                        rowsmin={3}
                         maxLength={500}
                     />
                 </AddRow2>

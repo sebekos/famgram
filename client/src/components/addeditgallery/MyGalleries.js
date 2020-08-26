@@ -10,6 +10,7 @@ import EditIcon from "@material-ui/icons/Edit";
 import MonochromePhotosIcon from "@material-ui/icons/MonochromePhotos";
 import LocalOfferIcon from "@material-ui/icons/LocalOffer";
 import styled from "styled-components";
+import Spinner from "../universal/Spinner";
 
 const Container = styled.div`
     margin: auto;
@@ -73,11 +74,16 @@ const Galleries = ({ mygalleries, onNav, onGallery }) => {
     );
 };
 
+const EmptyContainer = styled.div`
+    width: max-content;
+    margin: 3rem auto;
+`;
+
 const EmptyGallery = () => {
-    return <div>Empty</div>;
+    return <EmptyContainer>No Galleries</EmptyContainer>;
 };
 
-const MyGalleries = ({ userGalleries, mygalleries, mygalleriesfetch }) => {
+const MyGalleries = ({ userGalleries, mygalleries, mygalleriesfetch, loading }) => {
     useEffect(() => {
         if (mygalleriesfetch) userGalleries();
     }, [userGalleries, mygalleriesfetch]);
@@ -94,14 +100,17 @@ const MyGalleries = ({ userGalleries, mygalleries, mygalleriesfetch }) => {
 
     return (
         <Container>
-            {mygalleries.length > 0 ? <Galleries mygalleries={mygalleries} onNav={onNav} onGallery={onGallery} /> : <EmptyGallery />}
+            {loading && <Spinner />}
+            {mygalleries.length > 0 && <Galleries mygalleries={mygalleries} onNav={onNav} onGallery={onGallery} />}
+            {!loading && mygalleries.length === 0 && <EmptyGallery />}
         </Container>
     );
 };
 
 const mapStateToProps = (state) => ({
     mygalleries: state.gallery.mygalleries,
-    mygalleriesfetch: state.gallery.mygalleriesfetch
+    mygalleriesfetch: state.gallery.mygalleriesfetch,
+    loading: state.gallery.loading
 });
 
 const mapDispatchToProps = {

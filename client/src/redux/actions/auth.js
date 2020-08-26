@@ -1,5 +1,14 @@
 import axios from "axios";
-import { LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT, USER_LOADED, AUTH_ERROR, REGISTER_USER, REGISTER_FAIL } from "../constants/constants";
+import {
+    LOGIN_SUCCESS,
+    LOGIN_FAIL,
+    LOGOUT,
+    USER_LOADED,
+    AUTH_ERROR,
+    REGISTER_USER,
+    REGISTER_FAIL,
+    SET_AUTH_LOADING
+} from "../constants/constants";
 import { toast } from "react-toastify";
 import setAuthToken from "../utils/setAuthToken";
 
@@ -23,6 +32,7 @@ export const loadUser = () => async (dispatch) => {
 
 // Login User
 export const login = (email, password) => async (dispatch) => {
+    dispatch(setAuthLoading());
     const config = {
         headers: {
             "Content-Type": "application/json"
@@ -48,6 +58,7 @@ export const login = (email, password) => async (dispatch) => {
 
 // Register User
 export const register = (formData) => async (dispatch) => {
+    dispatch(setAuthLoading());
     const config = {
         headers: {
             "Content-Type": "application/json"
@@ -75,4 +86,9 @@ export const register = (formData) => async (dispatch) => {
 // Logout
 export const logout = () => (dispatch) => {
     dispatch({ type: LOGOUT });
+};
+
+// Set auth loading
+export const setAuthLoading = (payload) => async (dispatch) => {
+    dispatch({ type: SET_AUTH_LOADING, payload });
 };
