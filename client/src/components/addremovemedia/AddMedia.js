@@ -129,7 +129,6 @@ const AddMedia = ({ match }) => {
             })
             .then(() => {
                 setUploadSuccess(true);
-                setProgress(0);
             })
             .catch((err) => {
                 console.log(err);
@@ -159,11 +158,11 @@ const AddMedia = ({ match }) => {
                             <Button onClick={onImageUpload} variant="contained">
                                 Add images
                             </Button>
-                            <Button onClick={onImageRemoveAll} variant="contained">
+                            <Button onClick={onImageRemoveAll} variant="contained" color="secondary">
                                 Remove all images
                             </Button>
                             <Link to="/addeditgallery" style={{ textDecoration: "none" }}>
-                                <Button variant="contained" color="primary">
+                                <Button variant="contained" color="default">
                                     Back
                                 </Button>
                             </Link>
@@ -176,9 +175,9 @@ const AddMedia = ({ match }) => {
                                 </ImageContainer>
                             ))}
                         </ImagesContainer>
-                        {imageList.length > 0 && (
+                        {imageList.length > 0 && progress === 0 && (
                             <UploadButtonContainer>
-                                <Button variant="contained" onClick={onUpload}>
+                                <Button variant="contained" onClick={onUpload} color="default">
                                     Upload
                                 </Button>
                             </UploadButtonContainer>
