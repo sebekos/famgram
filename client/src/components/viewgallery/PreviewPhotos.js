@@ -15,6 +15,7 @@ const Container = styled.div`
 
 const ImageContainer = styled.div`
     height: 150px;
+    min-width: 200px;
     overflow: hidden;
     width: fit-content;
     cursor: pointer;
