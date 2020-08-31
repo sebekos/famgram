@@ -30,7 +30,13 @@ const ButtonsContainer = styled.div`
     justify-content: flex-end;
 `;
 
+const NoPeople = styled.div`
+    margin: 3rem auto;
+    width: max-content;
+`;
+
 const People = ({ people, onEdit }) => {
+    if (people.length === 0) return <NoPeople>No people</NoPeople>;
     return people.map((item) => {
         const { id, first_name, middle_name, last_name } = item;
         const nameMap = [first_name, middle_name, last_name].filter((item) => item !== "").join(" ");
