@@ -33,13 +33,7 @@ const Search = ({ getPeople, people, person_photos, person_loading, gallery_load
             <SelectContainer>
                 <FormControl variant="outlined" style={{ width: "100%" }}>
                     <InputLabel id="demo-simple-select-outlined-label">Person or galleries</InputLabel>
-                    <Select
-                        labelId="demo-simple-select-outlined-label"
-                        id="demo-simple-select-outlined"
-                        value={age}
-                        onChange={handleChange}
-                        label="Select person or gallery"
-                    >
+                    <Select labelId="demo-simple-select-outlined-label" id="demo-simple-select-outlined" value={age} onChange={handleChange} label="Select person or gallery">
                         <MenuItem value="Recent galleries">Recent galleries</MenuItem>
                         {!person_loading && people
                             ? people.map((item) => (
