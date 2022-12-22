@@ -32,7 +32,7 @@
         "express-validator": "^6.6.1",
         "file-type": "^15.0.0",
         "fs": "0.0.1-security",
-        "jsonwebtoken": "^8.5.1",
+        "jsonwebtoken": "^9.0.0",
         "lodash": "^4.17.20",
         "multiparty": "^4.2.2",
         "mysql2": "^2.1.0",
